@@ -1,0 +1,36 @@
+{
+  "name": "phyz",
+  "version": "1.0.0",
+  "description": "Phys is a lightweight, fast and simple game engine for use in desktops and mobile devices.",
+  "directories": {
+    "example": "examples"
+  },
+  "dependencies": {
+    "gulp": "~3.5.2",
+    "gulp-concat": "~2.1.7",
+    "gulp-uglify": "~0.2.1",
+    "gulp-util": "~2.2.14"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:renanvaz/Phyz.git"
+  },
+  "keywords": [
+    "game",
+    "engine",
+    "simple",
+    "easeljs",
+    "pixijs",
+    "mobile"
+  ],
+  "author": "Renan Vaz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/renanvaz/Phyz/issues"
+  },
+  "homepage": "https://github.com/renanvaz/Phyz"
+}
