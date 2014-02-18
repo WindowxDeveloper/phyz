@@ -1,18 +1,16 @@
-//(function(){var e = 'sprite,shape,spritesheet,player'.split(','), i=e.length; while(i--){document.createElement(e[i])}})();
-
-var DisplayObject = (function(){
-    function DisplayObject () {
-        this.container    = new createjs.Container();
+var Container = (function(){
+    function Container () {
+        this.layer        = new createjs.Container();
         this.parent       = null;
         this.event        = null;
         this.childs       = [];
     }
 
-    DisplayObject.prototype.addChild = function(child){
+    Container.prototype.addChild = function(child){
         child.parent = this;
 
-        if (this.container && child.container) {
-            this.container.addChild(child.container);
+        if (this.layer && child.layer) {
+            this.layer.addChild(child.layer);
         }
 
         this.childs.push(child);
@@ -21,9 +19,9 @@ var DisplayObject = (function(){
         child.trigger('added', this);
     };
 
-    DisplayObject.prototype.removeChild = function(child){
-        if (this.container && child.container) {
-            this.container.removeChild(child.container);
+    Container.prototype.removeChild = function(child){
+        if (this.layer && child.layer) {
+            this.layer.removeChild(child.layer);
         }
 
         this.childs.remove(child);
@@ -32,9 +30,9 @@ var DisplayObject = (function(){
         child.trigger('removed', this);
     };
 
-    EventHandler.init(DisplayObject.prototype);
+    EventHandler.init(Container.prototype);
 
-    return DisplayObject;
+    return Container;
 })();
 
 /*
@@ -43,7 +41,7 @@ var DisplayObject = (function(){
 */
 var Sprite = (function(){
     var Sprite = function (type, sensor) {
-        DisplayObject.apply(this);
+        Container.apply(this);
 
         this.type           = type || 'static';
         this.sensor         = sensor || false;
@@ -77,11 +75,11 @@ var Sprite = (function(){
             get: function(){ return this._view; },
             set: function(v){
                 if (this._view) {
-                    this.container.removeChild(this._view);
+                    this.layer.removeChild(this._view);
                 }
 
                 this._view = v;
-                this.container.addChild(this._view);
+                this.layer.addChild(this._view);
             }
         });
 
@@ -104,12 +102,12 @@ var Sprite = (function(){
         });
     };
 
-    Sprite.prototype = new DisplayObject();
+    Sprite.prototype = new Container();
 
     Sprite.prototype.debugDraw = function () {
         if (!this._debug) {
             this._debug = new createjs.Shape();
-            this.container.addChild(this._debug);
+            this.layer.addChild(this._debug);
         }
 
         this._debug.graphics.c().f('#000000').dr(0, 0, this.width, this.height);
@@ -199,7 +197,7 @@ var Camera = (function(){
 
 var Stage = (function(){
     function Stage () {
-        DisplayObject.apply(this);
+        Container.apply(this);
 
         this.x = 0;
         this.y = 0;
@@ -208,7 +206,7 @@ var Stage = (function(){
         this.layers = {};
     }
 
-    Stage.prototype = new DisplayObject();
+    Stage.prototype = new Container();
 
     Stage.prototype.addLayer = function(name, l){
         this.addChild(l);
@@ -232,11 +230,10 @@ var Paralax = (function(){
         var w           = image.width + Phyz.Camera.size.width,
             h           = image.height;
 
-        this.container  = new createjs.Container();
+        this.layer      = new createjs.Container();
         this.view       = new createjs.Shape();
 
         this.view.graphics.clear().beginBitmapFill(image, 'repeat').drawRect(0, 0, w, h);
-        container.addChild(this.view);
 
         this.x          = 0;
         this.y          = 0;
@@ -244,6 +241,8 @@ var Paralax = (function(){
 
         this.view.width = view.image.width;
         this.view.height = h;
+
+        this.layer.addChild(this.view);
     }
 
     return Paralax;
@@ -252,10 +251,10 @@ var Paralax = (function(){
 
 var Layer = (function(){
     function Layer () {
-        DisplayObject.apply(this);
+        Container.apply(this);
     }
 
-    Layer.prototype = new DisplayObject();
+    Layer.prototype = new Container();
 
     return Layer;
 })();

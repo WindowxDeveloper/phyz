@@ -1,4 +1,4 @@
-var Device = {
+module.exports.Device = {
     isStandAlone:       (('standalone' in window.navigator) && window.navigator.standalone === true),
     isRetinaDisplay:    (window.devicePixelRatio === 2),
     get isPortrait()    { return (window.orientation === 0 || window.orientation === 180); },
@@ -8,7 +8,7 @@ var Device = {
     isTouchPad:         (/hp-tablet/gi).test(navigator.appVersion)
 };
 
-var Events = {
+module.exports.Events = {
     RESIZE:         'onorientationchange' in window ? 'orientationchange' : 'resize',
     START:          'ontouchstart' in window ? 'touchstart' : 'mousedown',
     MOVE:           'ontouchstart' in window ? 'touchmove' : 'mousemove',
@@ -42,35 +42,6 @@ Array.prototype.remove = function() {
         }
     }
     return this;
-};
-
-var Arr = {
-    remove: function(array, remove){
-        var _return = [];
-
-        for(var i = 0; i < array.length; i++){
-            if(array[i] != remove){
-                _return.push(array[i]);
-            }
-        }
-
-        return _return;
-    },
-
-    merge: function(/* variable number of arrays */){
-        var _return = [];
-
-        for(var i = 0; i < arguments.length; i++){
-            var array = arguments[i];
-            for(var j = 0; j < array.length; j++){
-                if(_return.indexOf(array[j]) === -1) {
-                    _return.push(array[j]);
-                }
-            }
-        }
-
-        return _return;
-    }
 };
 
 
@@ -274,3 +245,5 @@ V2.prototype.len2 = function () {
 V2.prototype.len = function () {
     return Math.sqrt(this.len2());
 };
+
+module.exports.V2 = V2;

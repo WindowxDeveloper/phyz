@@ -1,15 +1,17 @@
 // npm install --save-dev gulp gulp-util gulp-concat gulp-uglify
-var gulp    = require('gulp'),
-    concat  = require('gulp-concat'),
-    uglify  = require('gulp-uglify');
+var gulp        = require('gulp'),
+    browserify  = require('gulp-browserify'),
+    concat      = require('gulp-concat'),
+    uglify      = require('gulp-uglify');
 
 var paths = {
-  scripts: ['src/js/*'],
+    scripts: ['src/js/Phyz.js'],
 };
 
 gulp.task('scripts', function() {
     // Minify and copy all JavaScript (except vendor scripts)
     return gulp.src(paths.scripts)
+        .pipe(browserify())
         .pipe(uglify())
         .pipe(concat('phyz.min.js'))
         .pipe(gulp.dest('build/js'));
