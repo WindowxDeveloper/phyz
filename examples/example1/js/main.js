@@ -1,17 +1,17 @@
-var p = Engine.Preloader;
+var p = Phyz.Preloader;
 
 p.add('square', 'http://placehold.it/50');
 p.add('ground', 'http://placehold.it/480x50');
 
 p.on('complete', function(){
     console.log('LOAD COMPLETE');
-    Engine.Settings.DEBUG_DRAW = true;
-    Engine.Camera.init(document.querySelector('canvas'));
-    Engine.Camera.width = 480;
-    Engine.Camera.height = 320;
+    Phyz.Settings.DEBUG_DRAW = true;
+    Phyz.Camera.init(document.querySelector('canvas'));
+    Phyz.Camera.width = 480;
+    Phyz.Camera.height = 320;
 
-    Engine.Stage.width = 960;
-    Engine.Stage.height = 640;
+    Phyz.Stage.width = 960;
+    Phyz.Stage.height = 640;
 
     var a = new Sprite('dynamic');
     a.view = new createjs.Bitmap(p.get('square'));
@@ -19,9 +19,9 @@ p.on('complete', function(){
     a.y = 0;
     a.width = 50;
     a.height = 50;
-    Engine.add(a);
+    Phyz.add(a);
 
-    Engine.Camera.following = a;
+    Phyz.Camera.following = a;
 
     var ground = new Sprite();
     ground.view = new createjs.Bitmap(p.get('ground'));
@@ -33,7 +33,7 @@ p.on('complete', function(){
 
     TweenLite.to(ground, 3, {x: 200});
 
-    Engine.add(ground);
+    Phyz.add(ground);
 
     document.addEventListener(Events.START, function(e){
         a.velocity.y = -300;
@@ -41,7 +41,7 @@ p.on('complete', function(){
         e.preventDefault();
     });
 
-    Engine.start();
+    Phyz.start();
 });
 
 p.start();
