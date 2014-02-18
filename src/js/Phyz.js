@@ -1,9 +1,7 @@
 /*  Authors: RVAZ (Renan Vaz) && Wormwood (Márcio Laubstein)
  *	Version: 4.0
 */
-
-
-var Phyz = (function(){
+require(['./Utils', './EventHandler', './DisplayObjects', './CollissionObjects', './Preloader', './TiledIndex', './Tween'], function(Utils, EventHandler, DisplayObjects, CollissionObjects, Preloader, TiledIndex, Tween) {
     var _sprites    = [],
         _stage      = null;
 
@@ -168,4 +166,4 @@ var Phyz = (function(){
     Phyz.Stage.addLayer('main', new Layer());
 
     return Phyz;
-})();
+});
