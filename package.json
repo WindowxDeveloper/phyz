@@ -1,7 +1,7 @@
 {
   "name": "phyz",
   "version": "1.0.0",
-  "description": "Phys is a lightweight, fast and simple game engine for use in desktops and mobile devices.",
+  "description": "Phyz is a lightweight, fast and simple game engine for use in desktops and mobile devices.",
   "directories": {
     "example": "examples"
   },

@@ -5,7 +5,7 @@
   "authors": [
     "Renan Vaz <renan.c.vaz@gmail.com>"
   ],
-  "description": "Phys is a lightweight, fast and simple game engine for use in desktops and mobile devices.",
+  "description": "Phyz is a lightweight, fast and simple game engine for use in desktops and mobile devices.",
   "main": "build/js/phyz.min.js",
   "keywords": [
     "game",
