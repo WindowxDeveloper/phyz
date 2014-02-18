@@ -3,7 +3,7 @@
 */
 
 
-var Engine = (function(){
+var Phyz = (function(){
     var _sprites    = [],
         _stage      = null;
 
@@ -18,13 +18,13 @@ var Engine = (function(){
             if (s.type === 'dynamic') {
 
                 acceleration = new V2(
-                    (Engine.Physics.acceleration.x + s.acceleration.x) * dt,
-                    (Engine.Physics.acceleration.y + s.acceleration.y) * dt
+                    (Phyz.Physics.acceleration.x + s.acceleration.x) * dt,
+                    (Phyz.Physics.acceleration.y + s.acceleration.y) * dt
                 );
 
                 resistance = new V2(
-                    (Engine.Physics.resistance.x + s.resistance.x) * dt,
-                    (Engine.Physics.resistance.y + s.resistance.y) * dt
+                    (Phyz.Physics.resistance.x + s.resistance.x) * dt,
+                    (Phyz.Physics.resistance.y + s.resistance.y) * dt
                 );
 
                 s.velocity.add(acceleration);
@@ -49,7 +49,7 @@ var Engine = (function(){
                 s.y += s.velocity.y * dt;
                 s.x += s.velocity.x * dt;
 
-                others = Engine.TiledIndex.getOthers(s);
+                others = Phyz.TiledIndex.getOthers(s);
 
                 for (j = 0; j < sprites.length; j++) {
                     o = sprites[j];
@@ -64,26 +64,26 @@ var Engine = (function(){
             }
         }
 
-        if (Engine.Camera.following) {
-            cMax = new V2(Engine.Stage.width - Engine.Camera.width, Engine.Stage.height - Engine.Camera.height);
-            Engine.Camera.x = Engine.Camera.following.x + (Engine.Camera.following.width/2) - (Engine.Camera.width/2);
-            Engine.Camera.y = Engine.Camera.following.y + (Engine.Camera.following.height/2) - (Engine.Camera.height/2);
+        if (Phyz.Camera.following) {
+            cMax = new V2(Phyz.Stage.width - Phyz.Camera.width, Phyz.Stage.height - Phyz.Camera.height);
+            Phyz.Camera.x = Phyz.Camera.following.x + (Phyz.Camera.following.width/2) - (Phyz.Camera.width/2);
+            Phyz.Camera.y = Phyz.Camera.following.y + (Phyz.Camera.following.height/2) - (Phyz.Camera.height/2);
 
-            if (Engine.Camera.x < 0) {
-                Engine.Camera.x = 0;
-            } else if (Engine.Camera.x > cMax.x) {
-                Engine.Camera.x = cMax.x;
+            if (Phyz.Camera.x < 0) {
+                Phyz.Camera.x = 0;
+            } else if (Phyz.Camera.x > cMax.x) {
+                Phyz.Camera.x = cMax.x;
             }
 
-            if (Engine.Camera.y < 0) {
-                Engine.Camera.y = 0;
-            } else if (Engine.Camera.y > cMax.y) {
-                Engine.Camera.y = cMax.y;
+            if (Phyz.Camera.y < 0) {
+                Phyz.Camera.y = 0;
+            } else if (Phyz.Camera.y > cMax.y) {
+                Phyz.Camera.y = cMax.y;
             }
         }
 
-        Engine.Stage.x = -Engine.Camera.x;
-        Engine.Stage.y = -Engine.Camera.y;
+        Phyz.Stage.x = -Phyz.Camera.x;
+        Phyz.Stage.y = -Phyz.Camera.y;
     };
 
     var _render = function(){
@@ -96,13 +96,13 @@ var Engine = (function(){
             s.container.y = Math.round(s.y);
         }
 
-        Engine.Stage.container.x = Math.round(Engine.Stage.x);
-        Engine.Stage.container.y = Math.round(Engine.Stage.y);
+        Phyz.Stage.container.x = Math.round(Phyz.Stage.x);
+        Phyz.Stage.container.y = Math.round(Phyz.Stage.y);
 
         _stage.update();
     };
 
-    var Engine = {
+    var Phyz = {
         Settings: {
             DEBUG_DRAW: true
         },
@@ -137,7 +137,7 @@ var Engine = (function(){
                 dt       = 0,
                 time     = 0,
                 last     = timestamp(),
-                fpsmeter = Engine.Settings.DEBUG_DRAW ? new FPSMeter({decimals: 0, graph: true, theme: 'dark', heat:  true, left: 'auto', top: '5px', right: '5px', bottom: 'auto'}) : null;
+                fpsmeter = Phyz.Settings.DEBUG_DRAW ? new FPSMeter({decimals: 0, graph: true, theme: 'dark', heat:  true, left: 'auto', top: '5px', right: '5px', bottom: 'auto'}) : null;
 
             this.TiledIndex = new TiledIndex();
 
@@ -163,9 +163,9 @@ var Engine = (function(){
         }
     };
 
-    EventHandler.init(Engine);
+    EventHandler.init(Phyz);
 
-    Engine.Stage.addLayer('main', new Layer());
+    Phyz.Stage.addLayer('main', new Layer());
 
-    return Engine;
+    return Phyz;
 })();

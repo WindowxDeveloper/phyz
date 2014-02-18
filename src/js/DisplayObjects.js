@@ -90,7 +90,7 @@ var Sprite = (function(){
             set: function(v){
                 this._width = v;
 
-                if (Engine.Settings.DEBUG_DRAW) this.debugDraw();
+                if (Phyz.Settings.DEBUG_DRAW) this.debugDraw();
             }
         });
 
@@ -99,7 +99,7 @@ var Sprite = (function(){
             set: function(v){
                 this._height = v;
 
-                if (Engine.Settings.DEBUG_DRAW) this.debugDraw();
+                if (Phyz.Settings.DEBUG_DRAW) this.debugDraw();
             }
         });
     };
@@ -229,7 +229,7 @@ var Stage = (function(){
 
 var Paralax = (function(){
     function Paralax (view, factor) {
-        var w           = image.width + Engine.Camera.size.width,
+        var w           = image.width + Phyz.Camera.size.width,
             h           = image.height;
 
         this.container  = new createjs.Container();

@@ -9,3 +9,14 @@ Phys is a lightweight, fast and simple game engine for use in desktops and mobil
 - Simple event handler.
 - Preload API, simple and minimalist.
 - Tween API.
+
+## Todo
+- Create a proccessor class
+- Create Tween API
+- Create Drivers for easeljs and pixijs (eg: DisplayObject.prototype.container = new createjs.Container;)
+- Extend Layers class
+    - Defaults
+        - bg
+        - defaut
+        - fg
+        - debug

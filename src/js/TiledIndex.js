@@ -9,20 +9,20 @@ var TiledIndex = (function(){
         this.width      = 200;
         this.height     = 200;
 
-        this.limitX     = ~~(Engine.Stage.width / this.width);
-        this.width      = Math.ceil(Engine.Stage.width / this.limitX);
+        this.limitX     = ~~(Phyz.Stage.width / this.width);
+        this.width      = Math.ceil(Phyz.Stage.width / this.limitX);
 
-        this.limitY     = ~~(Engine.Stage.height / this.height);
-        this.height     = Math.ceil(Engine.Stage.height / this.limitY);
+        this.limitY     = ~~(Phyz.Stage.height / this.height);
+        this.height     = Math.ceil(Phyz.Stage.height / this.limitY);
 
         this.limit      = this.limitX * this.limitY;
 
-        if(Engine.Settings.DEBUG_DRAW){
+        if(Phyz.Settings.DEBUG_DRAW){
             var n;
             for(var i = 0; i < this.limit; i++){
                 n = i + 1;
                 n = (n < 100 ? n < 10 ? '00' + n : '0' + n : n);
-                // $(Engine.Stage.el).append('<div style="outline: 1px solid rgba(0, 0, 0, .5); width:'+this.width+'px; height:'+this.height+'px; position: absolute; top:'+(~~(i/this.limitX) * this.height)+'px; left:'+(i%this.limitX * this.width)+'px; font-weight: bold; text-indent: 3px; text-shadow: 1px 1px 0 #fff;">'+n+'</div>')
+                // $(Phyz.Stage.el).append('<div style="outline: 1px solid rgba(0, 0, 0, .5); width:'+this.width+'px; height:'+this.height+'px; position: absolute; top:'+(~~(i/this.limitX) * this.height)+'px; left:'+(i%this.limitX * this.width)+'px; font-weight: bold; text-indent: 3px; text-shadow: 1px 1px 0 #fff;">'+n+'</div>')
             }
         }
     }
