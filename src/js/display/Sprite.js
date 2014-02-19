@@ -4,6 +4,10 @@ var V2 = require('../util/V2');
 var Sprite = function (type, sensor) {
     Container.apply(this);
 
+    this._view          = null;
+    this._debug         = null;
+    this._world         = null;
+
     this.type           = type || 'static';
     this.sensor         = sensor || false;
 
@@ -20,17 +24,13 @@ var Sprite = function (type, sensor) {
     this.config = {
         minVelocity     : new V2(-99999, -99999),
         maxVelocity     : new V2(99999, 99999),
-        plataform       : false, //Enabled only collisions at the top
-        collide         : false //Enabled only collisions at the top
+        plataform       : false //Enabled only collisions at the top
     };
 
     this.collisions     = new Collisions();
     this.tiles          = [];
 
     this.tick           = null;
-
-    this._view          = null;
-    this._debug         = null;
 
     Object.defineProperty(this, 'view', {
         get: function(){ return this._view; },
@@ -76,7 +76,8 @@ var Sprite = function (type, sensor) {
         }
     });
 
-     Object.defineProperty(this, 'root', {
+
+    Object.defineProperty(this, 'root', {
         get: function(){
             var r = this,
                 p = this.parent;
@@ -86,6 +87,12 @@ var Sprite = function (type, sensor) {
             }
 
             return r;
+        }
+    });
+
+    Object.defineProperty(this, 'world', {
+        get: function(){
+            return this.root._world;
         }
     });
 
