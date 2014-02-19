@@ -54,13 +54,9 @@ var Phyz = {
     },
 
     V2: V2,
-    Container: Container,
     Sprite: Sprite,
-    Camera: Camera,
-    Stage: Stage,
     Paralax: Paralax,
-    Tween: Tween,
-    Preloader: Preloader
+    Tween: Tween
 };
 
 window.P = window.Phyz = Phyz;
