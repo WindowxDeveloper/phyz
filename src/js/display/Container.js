@@ -1,3 +1,4 @@
+var EventHandler = require('../util/EventHandler');
 
 function Container () {
     this.layer        = new createjs.Container();

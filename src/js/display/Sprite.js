@@ -1,4 +1,5 @@
 var Container = require('./Container');
+var V2 = require('../util/V2');
 
 var Sprite = function (type, sensor) {
     Container.apply(this);
@@ -23,8 +24,8 @@ var Sprite = function (type, sensor) {
         collide         : false //Enabled only collisions at the top
     };
 
-    this.tiles          = [];
     this.collisions     = new Collisions();
+    this.tiles          = [];
 
     this.tick           = null;
 
@@ -60,6 +61,47 @@ var Sprite = function (type, sensor) {
             if (Phyz.Settings.DEBUG_DRAW) this.debugDraw();
         }
     });
+
+    Object.defineProperty(this, 'global', {
+        get: function(){
+            var pos = new V2(this.x, this.y),
+                p   = this.parent;
+
+            if (p) {
+                pos.x += p.global.x;
+                pos.y += p.global.y;
+            }
+
+            return pos;
+        }
+    });
+
+     Object.defineProperty(this, 'root', {
+        get: function(){
+            var r = this,
+                p = this.parent;
+
+            if (p) {
+                r = p.root;
+            }
+
+            return r;
+        }
+    });
+
+    Object.defineProperty(this, 'all_childrens_tiles', {
+        get: function(){
+            var t = this.tiles;
+
+            for(var i = 0; i < this.childs.length; i++){
+                for(var j = 0; j < this.childs[i].tiles.length; j++){
+                    t.push(this.childs[i].tiles[j]);
+                }
+            }
+
+            return t;
+        }
+    });
 };
 
 Sprite.prototype = new Container();
@@ -72,42 +114,7 @@ Sprite.prototype.debugDraw = function () {
 
     this._debug.graphics.c().f('#000000').dr(0, 0, this.width, this.height);
     this._debug.alpha = 0.5;
-    // this.debug.cache(-25, -25, 50, 50);
-};
-
-Sprite.prototype.getGlobalPosition = function () {
-    var pos = new V2(this.x, this.y),
-        p   = this.parent;
-
-    if (p) {
-        pos.x += p.getGlobalPosition().x;
-        pos.y += p.getGlobalPosition().y;
-    }
-
-    return pos;
-};
-
-Sprite.prototype.getRoot = function () {
-    var p = this,
-        s = this.parent;
-
-    if (s) {
-        p = s.getRoot();
-    }
-
-    return p;
-};
-
-Sprite.prototype.getTiles = function () {
-    var t = this.tiles;
-
-    for(var i = 0; i < this.childs.length; i++){
-        for(var j = 0; j < this.childs[i].tiles.length; j++){
-            t.push(this.childs[i].tiles[j]);
-        }
-    }
-
-    return t;
+    this._debug.cache(0, 0, this.width, this.height);
 };
 
 Sprite.prototype.setCache = function () {
