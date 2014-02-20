@@ -47,14 +47,14 @@ function World (el){
 
 World.prototype.removeChild = function (s) {
     this._sprites.remove(s);
-    this._stage.removeChild(s.layer);
+    this.camera.stage.layer.removeChild(s.layer);
 };
 
 World.prototype.addChild = function (s) {
     s._world = this;
 
     this._sprites.push(s);
-    this._stage.addChild(s.layer);
+    this.camera.stage.layer.addChild(s.layer);
 };
 
 World.prototype.start = function () {

@@ -1,4 +1,5 @@
-var preloader = new P.Preloader();
+var preloader = new P.Preloader(),
+    w = new P.World(document.querySelector('canvas'));
 
 preloader.add('square', 'http://placehold.it/50');
 preloader.add('ground', 'http://placehold.it/480x50');
@@ -6,7 +7,6 @@ preloader.add('ground', 'http://placehold.it/480x50');
 preloader.on('complete', function(){
     console.log('LOAD COMPLETE');
 
-    var w = new P.World(document.querySelector('canvas'));
     w.camera.width = 480;
     w.camera.height = 320;
     w.camera.stage.width = 960;
@@ -48,6 +48,7 @@ preloader.on('complete', function(){
         e.preventDefault();
     });
 
+    w.camera.following = s;
     w.start();
 });
 
