@@ -28,6 +28,14 @@ preloader.on('complete', function(){
     g.x = 0;
     g.y = 300;
 
+    var g2 = new P.Sprite('static', false);
+    g2.view = new createjs.Bitmap(preloader.get('ground'));
+    w.addChild(g2);
+    g2.width = 480;
+    g2.height = 50;
+    g2.x = 150;
+    g2.y = 100;
+
 
     /*
     var animPlataform = function(){
@@ -51,7 +59,7 @@ preloader.on('complete', function(){
     w.camera.following = s;
     w.start();
 
-    P.Tween.to(g, {x: 110}, {time: 1, delay: 2, ease: 'easeOutBounce', oncomplete: function(){ console.log('complete ' + this.x); }});
+    P.Tween.to(g, {x: 300}, {time: 1, delay: 2, ease: 'easeOutBounce', oncomplete: function(){ console.log('complete ' + this.x); }});
 });
 
 preloader.start();
