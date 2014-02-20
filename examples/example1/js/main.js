@@ -1,47 +1,54 @@
-var p = Phyz.Preloader;
+var preloader = new P.Preloader();
 
-p.add('square', 'http://placehold.it/50');
-p.add('ground', 'http://placehold.it/480x50');
+preloader.add('square', 'http://placehold.it/50');
+preloader.add('ground', 'http://placehold.it/480x50');
 
-p.on('complete', function(){
+preloader.on('complete', function(){
     console.log('LOAD COMPLETE');
-    Phyz.Settings.DEBUG_DRAW = true;
-    Phyz.Camera.init(document.querySelector('canvas'));
-    Phyz.Camera.width = 480;
-    Phyz.Camera.height = 320;
 
-    Phyz.Stage.width = 960;
-    Phyz.Stage.height = 640;
+    var w = new P.World(document.querySelector('canvas'));
+    w.camera.width = 480;
+    w.camera.height = 320;
+    w.camera.stage.width = 960;
+    w.camera.stage.height = 640;
 
-    var a = new Sprite('dynamic');
-    a.view = new createjs.Bitmap(p.get('square'));
-    a.x = 100;
-    a.y = 0;
-    a.width = 50;
-    a.height = 50;
-    Phyz.add(a);
+    var s = new P.Sprite('dynamic', false);
+    s.view = new createjs.Bitmap(preloader.get('square'));
+    w.addChild(s);
+    s.width = 50;
+    s.height = 50;
+    s.x = 100;
+    s.y = 0;
 
-    Phyz.Camera.following = a;
+    var g = new P.Sprite('static', false);
+    g.view = new createjs.Bitmap(preloader.get('ground'));
+    w.addChild(g);
+    g.width = 480;
+    g.height = 50;
+    g.x = 0;
+    g.y = 300;
 
-    var ground = new Sprite();
-    ground.view = new createjs.Bitmap(p.get('ground'));
-    // ground.config.plataform = true;
-    ground.x = 0;
-    ground.y = 320 - 25;
-    ground.width = 480;
-    ground.height = 50;
 
-    TweenLite.to(ground, 3, {x: 200});
+    /*
+    var animPlataform = function(){
+        Tween.to(s, {x: 100}, {time: 1, oncomplete: function(){
+            Tween.to(s, {x: 0}, {time: 1, oncomplete: function(){
+                animPlataform();
+            }});
+        }});
+    };
 
-    Phyz.add(ground);
+    animPlataform();
+    */
 
-    document.addEventListener(Events.START, function(e){
-        a.velocity.y = -300;
+
+    document.addEventListener(P.util.events.START, function(e){
+        s.velocity.y = -300;
 
         e.preventDefault();
     });
 
-    Phyz.start();
+    w.start();
 });
 
-p.start();
+preloader.start();

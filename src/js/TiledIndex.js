@@ -16,7 +16,7 @@ function TiledIndex(){
 
     this.limit      = this.limitX * this.limitY;
 
-    if(window.Phyz.Settings.DEBUG_DRAW){
+    if(window.Phyz.settings.DEBUG_DRAW){
         var n;
         for(var i = 0; i < this.limit; i++){
             n = i + 1;

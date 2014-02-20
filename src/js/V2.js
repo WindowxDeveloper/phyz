@@ -6,7 +6,7 @@
  * @param {?number=} y The y position.
  * @constructor
  */
-var V2 = function (x, y) {
+function V2 (x, y) {
     this.x = Number(x || 0);
     this.y = Number(y || 0);
 };
@@ -200,4 +200,4 @@ V2.prototype.len = function () {
     return Math.sqrt(this.len2());
 };
 
-module.exports.V2 = V2;
+module.exports = V2;

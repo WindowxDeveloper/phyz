@@ -5,7 +5,6 @@
 var EventHandler        = require('./util/EventHandler'),
     Device              = require('./util/Device'),
     Events              = require('./util/Events'),
-    V2                  = require('./util/V2'),
     Collisions          = require('./collision/Collisions'),
     Collide             = require('./collision/Collide'),
     Container           = require('./display/Container'),
@@ -15,6 +14,7 @@ var EventHandler        = require('./util/EventHandler'),
     Paralax             = require('./display/Paralax'),
     Tween               = require('./tween/Tween'),
     Preloader           = require('./preloader/Preloader'),
+    V2                  = require('./V2'),
     TiledIndex          = require('./TiledIndex');
 
 function World (el){
@@ -24,14 +24,14 @@ function World (el){
 
     this.camera     = new Camera(el);
 
-    this.Settings   = {
+    this.settings   = {
         DEBUG_DRAW: true,
         FPS_METER: true
     };
 
-    this.Physics = {
+    this.physics = {
         acceleration: new V2(0, 800),
-        resistance: new V2(0, 200)
+        resistance: new V2(200, 0)
     };
 
     Object.defineProperty(this, 'paused', {
@@ -45,19 +45,21 @@ function World (el){
     this._stage.addChild(this.camera.stage.layer);
 }
 
-World.prototype.remove = function (s) {
-    this._sprites.remove(sprite);
-    this.Stage.removeChild(sprite);
+World.prototype.removeChild = function (s) {
+    this._sprites.remove(s);
+    this._stage.removeChild(s.layer);
 };
 
-World.prototype.add = function (sprite) {
-    _sprites.push(s);
+World.prototype.addChild = function (s) {
     s._world = this;
 
-    this.Stage.addChild(s);
+    this._sprites.push(s);
+    this._stage.addChild(s.layer);
 };
 
 World.prototype.start = function () {
+    var _this = this;
+
     var timestamp = function () {
         return ((window.performance && window.performance.now) ? window.performance.now() : new Date().getTime());
     };
@@ -66,8 +68,8 @@ World.prototype.start = function () {
         now = timestamp();
         time = time + Math.min(1, (now - last) / 1000);
         dt = Math.min(1, (now - last) / 1000);
-        _update(dt);
-        _render();
+        _this._update(dt);
+        _this._render();
         last = now;
         if (fpsmeter) fpsmeter.tick();
         requestAnimationFrame(frame);
@@ -77,16 +79,16 @@ World.prototype.start = function () {
         dt       = 0,
         time     = 0,
         last     = timestamp(),
-        fpsmeter = this.Settings.FPS_METER ? new FPSMeter({decimals: 0, graph: true, theme: 'dark', heat:  true, left: 'auto', top: '5px', right: '5px', bottom: 'auto'}) : null;
+        fpsmeter = this.settings.FPS_METER ? new FPSMeter({decimals: 0, graph: true, theme: 'dark', heat:  true, left: 'auto', top: '5px', right: '5px', bottom: 'auto'}) : null;
 
-    this.TiledIndex = new TiledIndex();
+    // this.TiledIndex = new TiledIndex();
 
     if (fpsmeter) fpsmeter.tickStart();
     requestAnimationFrame(frame);
 };
 
-var _update = function(dt){
-    var sprites = _sprites, s, acceleration, resistance, others, o, i, j, cMax;
+World.prototype._update = function(dt){
+    var sprites = this._sprites, s, acceleration, resistance, others, o, i, j, cMax;
 
     for (i = 0; i < sprites.length; i++) {
         s = sprites[i];
@@ -94,15 +96,14 @@ var _update = function(dt){
         s.setCache();
 
         if (s.type === 'dynamic') {
-
             acceleration = new V2(
-                (this.Physics.acceleration.x + s.acceleration.x) * dt,
-                (this.Physics.acceleration.y + s.acceleration.y) * dt
+                (this.physics.acceleration.x + s.acceleration.x) * dt,
+                (this.physics.acceleration.y + s.acceleration.y) * dt
             );
 
             resistance = new V2(
-                (this.Physics.resistance.x + s.resistance.x) * dt,
-                (this.Physics.resistance.y + s.resistance.y) * dt
+                (this.physics.resistance.x + s.resistance.x) * dt,
+                (this.physics.resistance.y + s.resistance.y) * dt
             );
 
             s.velocity.add(acceleration);
@@ -127,7 +128,7 @@ var _update = function(dt){
             s.y += s.velocity.y * dt;
             s.x += s.velocity.x * dt;
 
-            others = this.TiledIndex.getOthers(s);
+            // others = this.TiledIndex.getOthers(s);
 
             for (j = 0; j < sprites.length; j++) {
                 o = sprites[j];
@@ -142,46 +143,41 @@ var _update = function(dt){
         }
     }
 
-    if (this.Camera.following) {
-        cMax = new V2(this.Stage.width - this.Camera.width, this.Stage.height - this.Camera.height);
-        this.Camera.x = this.Camera.following.x + (this.Camera.following.width/2) - (this.Camera.width/2);
-        this.Camera.y = this.Camera.following.y + (this.Camera.following.height/2) - (this.Camera.height/2);
+    if (this.camera.following) {
+        cMax = new V2(this.camera.stage.width - this.camera.width, this.camera.stage.height - this.camera.height);
+        this.camera.x = this.camera.following.x + (this.camera.following.width/2) - (this.camera.width/2);
+        this.camera.y = this.camera.following.y + (this.camera.following.height/2) - (this.camera.height/2);
 
-        if (this.Camera.x < 0) {
-            this.Camera.x = 0;
-        } else if (this.Camera.x > cMax.x) {
-            this.Camera.x = cMax.x;
+        if (this.camera.x < 0) {
+            this.camera.x = 0;
+        } else if (this.camera.x > cMax.x) {
+            this.camera.x = cMax.x;
         }
 
-        if (this.Camera.y < 0) {
-            this.Camera.y = 0;
-        } else if (this.Camera.y > cMax.y) {
-            this.Camera.y = cMax.y;
+        if (this.camera.y < 0) {
+            this.camera.y = 0;
+        } else if (this.camera.y > cMax.y) {
+            this.camera.y = cMax.y;
         }
     }
-
-    this.Stage.x = -this.Camera.x;
-    this.Stage.y = -this.Camera.y;
 };
 
-var _render = function(){
+World.prototype._render = function(){
     var s, i;
 
-    for (i = 0; i < _sprites.length; i++) {
-        s = _sprites[i];
+    for (i = 0; i < this._sprites.length; i++) {
+        s = this._sprites[i];
 
-        s.container.x = Math.round(s.x);
-        s.container.y = Math.round(s.y);
+        s.layer.x = Math.round(s.x);
+        s.layer.y = Math.round(s.y);
     }
 
-    this.Stage.container.x = Math.round(this.Stage.x);
-    this.Stage.container.y = Math.round(this.Stage.y);
+    this.camera.stage.layer.x = Math.round(this.camera.stage.x);
+    this.camera.stage.layer.y = Math.round(this.camera.stage.y);
 
-    _stage.update();
+    this._stage.update();
 };
 
 EventHandler.init(World.prototype);
 
-Phyz.Stage.addLayer('main', new Container());
-
-module.exports = Phyz;
+module.exports = World;

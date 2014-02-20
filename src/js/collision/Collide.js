@@ -1,9 +1,10 @@
+var CollisionData   = require('./CollisionData'),
+    Collisions      = require('./Collisions'),
+    V2              = require('../V2');
 
 function Collide () {}
 
 Collide.prototype.check = function(s, o){
-    if (!s instanceof Sprite || !o instanceof Sprite) return false;
-
     var collided = false, overlap = new V2(0, 0), a, b, x, y, c;
 
     if (s.x <= o.x) { a = s; b = o; } else { a = o; b = s; }
@@ -80,4 +81,4 @@ Collide.prototype.elastic = function (collision) {
     );
 };
 
-module.exports = Collide;
+module.exports = new Collide;

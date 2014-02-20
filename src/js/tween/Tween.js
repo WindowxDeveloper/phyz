@@ -72,8 +72,4 @@ Tween.prototype.from = function (o, props, params) {
     this.tweens.push(t);
 };
 
-Ticker.add(function(){
-
-});
-
 module.exports = Tween;

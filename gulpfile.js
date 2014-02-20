@@ -12,7 +12,7 @@ gulp.task('scripts', function() {
     // Minify and copy all JavaScript (except vendor scripts)
     return gulp.src(paths.scripts)
         .pipe(browserify())
-        .pipe(uglify())
+        // .pipe(uglify())
         .pipe(concat('phyz.min.js'))
         .pipe(gulp.dest('build/js'));
 });

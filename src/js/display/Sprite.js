@@ -1,5 +1,6 @@
-var Container = require('./Container');
-var V2 = require('../util/V2');
+var Container   = require('./Container'),
+    Collisions  = require('../collision/Collisions'),
+    V2          = require('../V2');
 
 var Sprite = function (type, sensor) {
     Container.apply(this);
@@ -49,7 +50,7 @@ var Sprite = function (type, sensor) {
         set: function(v){
             this._width = v;
 
-            if (Phyz.Settings.DEBUG_DRAW) this.debugDraw();
+            if (this.world.settings.DEBUG_DRAW) this.debugDraw();
         }
     });
 
@@ -58,7 +59,7 @@ var Sprite = function (type, sensor) {
         set: function(v){
             this._height = v;
 
-            if (Phyz.Settings.DEBUG_DRAW) this.debugDraw();
+            if (this.world.settings.DEBUG_DRAW) this.debugDraw();
         }
     });
 
@@ -75,7 +76,6 @@ var Sprite = function (type, sensor) {
             return pos;
         }
     });
-
 
     Object.defineProperty(this, 'root', {
         get: function(){

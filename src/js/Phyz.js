@@ -27,23 +27,23 @@ if(!Array.prototype.remove) {
     };
 }
 
-var EventHandler        = require('./util/EventHandler');
-var Device              = require('./util/Device');
-var Events              = require('./util/Events');
-var V2                  = require('./util/V2');
-var Container           = require('./display/Container');
-var Sprite              = require('./display/Sprite');
-var Camera              = require('./display/Camera');
-var Stage               = require('./display/Stage');
-var Paralax             = require('./display/Paralax');
-var Tween               = require('./tween/Tween');
-var Preloader           = require('./preloader/Preloader');
-var World               = require('./World');
+var EventHandler        = require('./util/EventHandler'),
+    Device              = require('./util/Device'),
+    Events              = require('./util/Events'),
+    Container           = require('./display/Container'),
+    Sprite              = require('./display/Sprite'),
+    Camera              = require('./display/Camera'),
+    Stage               = require('./display/Stage'),
+    Paralax             = require('./display/Paralax'),
+    Tween               = require('./tween/Tween'),
+    Preloader           = require('./preloader/Preloader'),
+    V2                  = require('./V2'),
+    World               = require('./World');
 
 var Phyz = {
-    utils: {
-        Device: Device,
-        Events: Events,
+    util: {
+        device: Device,
+        events: Events,
         EventHandler: EventHandler
     },
 
@@ -56,52 +56,3 @@ var Phyz = {
 };
 
 window.P = window.Phyz = Phyz;
-
-module.exports = Phyz;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var w = new P.World(el);
-w.camera.width = 480;
-w.camera.height = 320;
-w.camera.stage.width = 960;
-w.camera.stage.height = 640;
-
-var type = 'dynamic', // static
-    isSensor =  false; // true;
-
-var s = new P.Sprite('dynamic', false);
-s.view = new createjs.Bitmap(img);
-s.width = 200;
-s.height = 200;
-s.x = 0;
-s.y = 0;
-
-w.layers.push(new Layer('default'));
-
-w.add(s, 'default');
-w.remove(s);
-
-
-var animPlataform = function(){
-    Tween.to(s, {x: 100}, {time: 1, oncomplete: function(){
-        Tween.to(s, {x: 0}, {time: 1, oncomplete: function(){
-            animPlataform();
-        }});
-    }});
-};
-
-animPlataform();
-

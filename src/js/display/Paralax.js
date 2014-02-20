@@ -1,5 +1,3 @@
-var Engine = require('./Engine');
-
 function Paralax (view, factor) {
     var w           = image.width + window.Phyz.Camera.width,
         h           = image.height;

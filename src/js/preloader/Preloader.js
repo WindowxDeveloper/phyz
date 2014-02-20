@@ -1,3 +1,5 @@
+var EventHandler = require('../util/EventHandler');
+
 function Preloader(){
     this.order = [];
     this.queue = {};
