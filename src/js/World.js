@@ -53,8 +53,10 @@ World.prototype.removeChild = function (s) {
 World.prototype.addChild = function (s) {
     s._world = this;
 
-    this._sprites.push(s);
     this.camera.stage.layer.addChild(s.layer);
+
+    this._sprites.push(s);
+    if (this.settings.DEBUG_DRAW) s.debugDraw();
 };
 
 World.prototype.start = function () {
@@ -90,10 +92,17 @@ World.prototype.start = function () {
 World.prototype._update = function(dt){
     var sprites = this._sprites, s, acceleration, resistance, others, o, i, j, cMax;
 
+    Tween.tick(dt);
+
+    // Sprites
     for (i = 0; i < sprites.length; i++) {
         s = sprites[i];
 
         s.setCache();
+
+        if (s.tick) {
+            s.tick(dt);
+        }
 
         if (s.type === 'dynamic') {
             acceleration = new V2(
@@ -136,13 +145,10 @@ World.prototype._update = function(dt){
                     Collide.check(s, o);
                 }
             }
-
-            if (s.tick) {
-                s.tick(dt);
-            }
         }
     }
 
+    // Camera
     if (this.camera.following) {
         cMax = new V2(this.camera.stage.width - this.camera.width, this.camera.stage.height - this.camera.height);
         this.camera.x = this.camera.following.x + (this.camera.following.width/2) - (this.camera.width/2);

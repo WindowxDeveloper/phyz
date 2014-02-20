@@ -50,7 +50,7 @@ var Sprite = function (type, sensor) {
         set: function(v){
             this._width = v;
 
-            if (this.world.settings.DEBUG_DRAW) this.debugDraw();
+            if (this.world && this.world.settings.DEBUG_DRAW) this.debugDraw();
         }
     });
 
@@ -59,7 +59,7 @@ var Sprite = function (type, sensor) {
         set: function(v){
             this._height = v;
 
-            if (this.world.settings.DEBUG_DRAW) this.debugDraw();
+            if (this.world && this.world.settings.DEBUG_DRAW) this.debugDraw();
         }
     });
 

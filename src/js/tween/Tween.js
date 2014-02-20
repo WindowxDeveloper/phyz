@@ -1,4 +1,3 @@
-var EventHandler = require('../util/EventHandler');
 var Easings = require('./Easings');
 
 /*
@@ -9,67 +8,93 @@ var Easings = require('./Easings');
  * t => to
  */
 function TweenData (o, p, f, t) {
-    this.dt = 0;
+    this.dt = -p.delay;
     this.o = o;
     this.p = p;
     this.from = f;
     this.to = t;
 }
 
-EventHandler.init(TweenData.prototype);
-
 function Tween () {
-    this.tweens = [];
-    this.ease = 'default';
+    this._tweens = [];
+    this.defaults = {
+        time: 0.6,
+        delay: 0,
+        ease: 'linear',
+    }
 }
 
-
 Tween.prototype.to = function (o, props, params) {
-    if (typeof params === 'number') {
-        params = {time: params};
-    }
-
-    params.delay    = p.delay || 0;
-    params.ease     = p.ease || this.ease;
-
-    var from = {},
-        to = {},
-        t, i;
-
-    for (i in props) {
-        from[i] = o[i];
-        to[i] = props[i];
-    }
-
-    t = new TweenData(o, from, to);
-
-    if (params.onComplete) t.on('complete', params.onComplete);
-
-    this.tweens.push(t);
+    this.create(o, props, params, false);
 };
 
 Tween.prototype.from = function (o, props, params) {
-    if (typeof params === 'number') {
+    this.create(o, props, params, true);
+};
+
+Tween.prototype.create = function (o, props, params, isFrom) {
+     if (typeof params === 'number') {
         params = {time: params};
+    } else if (typeof params === 'undefined') {
+        params = {};
     }
 
-    params.delay    = p.delay || 0;
-    params.ease     = p.ease || this.ease;
+    params.time     = params.time || this.defaults.time;
+    params.delay    = params.delay || this.defaults.delay;
+    params.ease     = params.ease || this.defaults.ease;
 
     var from = {},
         to = {},
         t, i;
 
     for (i in props) {
-        from[i] = props[i];
-        to[i] = o[i];
+        if (isFrom) {
+            from[i] = props[i];
+            to[i]   = o[i];
+        } else {
+            to[i]   = props[i];
+            from[i] = o[i];
+        }
     }
 
-    t = new TweenData(o, from, to);
+    t = new TweenData(o, params, from, to);
 
-    if (params.onComplete) t.on('complete', params.onComplete);
-
-    this.tweens.push(t);
+    this._tweens.push(t);
 };
 
-module.exports = Tween;
+Tween.prototype.stop = function (o) {
+    var i, tweens = this._tweens, len = tweens.length, t;
+
+    for (i = 0; i < len; i++) {
+        t = tweens[i];
+        if (t.o === o) {
+            this._tweens.remove(t);
+        }
+    }
+};
+
+Tween.prototype.tick = function (dt) {
+    var i, j, tweens = this._tweens, len = tweens.length, t;
+
+    for (i = 0; i < len; i++) {
+        t = tweens[i];
+
+        t.dt += dt;
+        t.dt = (t.dt > t.p.time ? t.p.time : t.dt);
+
+        if (t.dt > 0) {
+            for (j in t.from) {
+                t.o[j] = Easings[t.p.ease](t.dt, t.from[j], t.to[j], t.p.time);
+            }
+        }
+
+        if (t.dt === t.p.time) {
+            if (t.p.oncomplete) {
+                t.p.oncomplete.apply(t.o);
+            }
+            this._tweens.remove(t);
+        }
+    }
+}
+
+module.exports = new Tween();

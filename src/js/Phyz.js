@@ -2,7 +2,7 @@
  *	Version: 4.0
 */
 
-if(!Array.prototype.indexOf) {
+if (!Array.prototype.indexOf) {
     Array.prototype.indexOf = function(what, i) {
         i = i || 0;
         var L = this.length;
@@ -14,7 +14,7 @@ if(!Array.prototype.indexOf) {
     };
 }
 
-if(!Array.prototype.remove) {
+if (!Array.prototype.remove) {
     Array.prototype.remove = function() {
         var what, a = arguments, L = a.length, ax;
         while (L && this.length) {

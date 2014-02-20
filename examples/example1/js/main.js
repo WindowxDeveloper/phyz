@@ -43,13 +43,15 @@ preloader.on('complete', function(){
 
 
     document.addEventListener(P.util.events.START, function(e){
-        s.velocity.y = -300;
+        s.velocity.x = 200;
 
         e.preventDefault();
     });
 
     w.camera.following = s;
     w.start();
+
+    P.Tween.to(g, {x: 110}, {time: 1, delay: 2, ease: 'easeOutBounce', oncomplete: function(){ console.log('complete ' + this.x); }});
 });
 
 preloader.start();
