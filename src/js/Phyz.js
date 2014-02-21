@@ -32,10 +32,7 @@ var EventHandler        = require('./util/EventHandler'),
     Events              = require('./util/Events'),
     Container           = require('./display/Container'),
     Sprite              = require('./display/Sprite'),
-    Camera              = require('./display/Camera'),
-    Stage               = require('./display/Stage'),
     Paralax             = require('./display/Paralax'),
-    Tween               = require('./tween/Tween'),
     Preloader           = require('./preloader/Preloader'),
     V2                  = require('./V2'),
     World               = require('./World');
@@ -46,12 +43,11 @@ var Phyz = {
         events: Events,
         EventHandler: EventHandler
     },
-
     V2: V2,
+    Preloader: Preloader,
+    Container: Container,
     Sprite: Sprite,
     Paralax: Paralax,
-    Preloader: Preloader,
-    Tween: Tween,
     World: World
 };
 

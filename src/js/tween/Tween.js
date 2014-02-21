@@ -73,28 +73,4 @@ Tween.prototype.stop = function (o) {
     }
 };
 
-Tween.prototype.tick = function (dt) {
-    var i, j, tweens = this._tweens, len = tweens.length, t;
-
-    for (i = 0; i < len; i++) {
-        t = tweens[i];
-
-        t.dt += dt;
-        t.dt = (t.dt > t.p.time ? t.p.time : t.dt);
-
-        if (t.dt > 0) {
-            for (j in t.from) {
-                t.o[j] = Easings[t.p.ease](t.dt, t.from[j], t.to[j], t.p.time);
-            }
-        }
-
-        if (t.dt === t.p.time) {
-            if (t.p.oncomplete) {
-                t.p.oncomplete.apply(t.o);
-            }
-            this._tweens.remove(t);
-        }
-    }
-}
-
-module.exports = new Tween();
+module.exports = Tween;

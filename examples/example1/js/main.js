@@ -7,51 +7,40 @@ preloader.add('ground', 'http://placehold.it/480x50');
 preloader.on('complete', function(){
     console.log('LOAD COMPLETE');
 
-    w.camera.width = 480;
-    w.camera.height = 320;
+    w.camera.width = 960;
+    w.camera.height = 640;
     w.camera.stage.width = 960;
     w.camera.stage.height = 640;
 
     var s = new P.Sprite('dynamic', false);
     s.view = new createjs.Bitmap(preloader.get('square'));
-    w.addChild(s);
     s.width = 50;
     s.height = 50;
-    s.x = 100;
+    s.x = 150;
     s.y = 0;
 
     var g = new P.Sprite('static', false);
     g.view = new createjs.Bitmap(preloader.get('ground'));
-    w.addChild(g);
     g.width = 480;
     g.height = 50;
     g.x = 0;
     g.y = 300;
 
-    var g2 = new P.Sprite('static', false);
-    g2.view = new createjs.Bitmap(preloader.get('ground'));
-    w.addChild(g2);
-    g2.width = 480;
-    g2.height = 50;
-    g2.x = 150;
-    g2.y = 100;
+    w.addChild(s);
+    w.addChild(g);
 
-
-    /*
     var animPlataform = function(){
-        Tween.to(s, {x: 100}, {time: 1, oncomplete: function(){
-            Tween.to(s, {x: 0}, {time: 1, oncomplete: function(){
+        P.Tween.to(g, {x: 300}, {time: 1, delay: 2, ease: 'easeOutBounce', oncomplete: function(){
+            P.Tween.to(g, {x: 10}, {time: 1, ease: 'easeOutBounce', oncomplete: function(){
                 animPlataform();
             }});
         }});
     };
 
     animPlataform();
-    */
-
 
     document.addEventListener(P.util.events.START, function(e){
-        s.velocity.x = 200;
+        s.velocity.y = -300;
 
         e.preventDefault();
     });
@@ -59,7 +48,6 @@ preloader.on('complete', function(){
     w.camera.following = s;
     w.start();
 
-    P.Tween.to(g, {x: 300}, {time: 1, delay: 2, ease: 'easeOutBounce', oncomplete: function(){ console.log('complete ' + this.x); }});
 });
 
 preloader.start();

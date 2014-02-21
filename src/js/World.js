@@ -13,6 +13,7 @@ var EventHandler        = require('./util/EventHandler'),
     Stage               = require('./display/Stage'),
     Paralax             = require('./display/Paralax'),
     Tween               = require('./tween/Tween'),
+    Easings             = require('./tween/Easings'),
     Preloader           = require('./preloader/Preloader'),
     V2                  = require('./V2'),
     TiledIndex          = require('./TiledIndex');
@@ -23,6 +24,7 @@ function World (el){
     this._paused    = false;
 
     this.camera     = new Camera(el);
+    this.tween      = new Tween();
 
     this.settings   = {
         DEBUG_DRAW: true,
@@ -90,11 +92,32 @@ World.prototype.start = function () {
 };
 
 World.prototype._update = function(dt){
-    var sprites = this._sprites, s, acceleration, resistance, others, o, i, j, cMax;
+    // Tween
+    var i, j, tweens = this.tween._tweens, len = tweens.length, t;
 
-    Tween.tick(dt);
+    for (i = 0; i < len; i++) {
+        t = tweens[i];
+
+        t.dt += dt;
+        t.dt = (t.dt > t.p.time ? t.p.time : t.dt);
+
+        if (t.dt > 0) {
+            for (j in t.from) {
+                t.o[j] = Easings[t.p.ease](t.dt, t.from[j], t.to[j] - t.from[j], t.p.time);
+            }
+        }
+
+        if (t.dt === t.p.time) {
+            if (t.p.oncomplete) {
+                t.p.oncomplete.apply(t.o);
+            }
+            this.tween._tweens.remove(t);
+        }
+    }
 
     // Sprites
+    var sprites = this._sprites, s, acceleration, resistance, others, o, i, j, cMax;
+
     for (i = 0; i < sprites.length; i++) {
         s = sprites[i];
 

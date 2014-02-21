@@ -12,7 +12,6 @@ Phyz is a lightweight, fast and simple game engine for use in desktops and mobil
 - Tween API.
 
 ## Todo
-- Ticker of tween, sprite and camera?
 - Não quero depender dos elementos estarem adicionado no mundo para
 - Paralax
 - Add TiledIndex (and integrate with automate Stage size changes)
