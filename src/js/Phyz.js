@@ -21,9 +21,9 @@ if (!Array.prototype.remove) {
             what = a[--L];
             while ((ax = this.indexOf(what)) !== -1) {
                 this.splice(ax, 1);
-            }
-        }
-        return this;
+            } 
+        }     
+        return this; 
     };
 }
 

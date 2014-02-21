@@ -7,6 +7,8 @@ preloader.add('ground', 'http://placehold.it/480x50');
 preloader.on('complete', function(){
     console.log('LOAD COMPLETE');
 
+    w.settings.DEBUG_DRAW = false;
+    w.settings.FPS_METTER = false;
     w.camera.width = 960;
     w.camera.height = 640;
     w.camera.stage.width = 960;
@@ -30,8 +32,8 @@ preloader.on('complete', function(){
     w.addChild(g);
 
     var animPlataform = function(){
-        P.Tween.to(g, {x: 300}, {time: 1, delay: 2, ease: 'easeOutBounce', oncomplete: function(){
-            P.Tween.to(g, {x: 10}, {time: 1, ease: 'easeOutBounce', oncomplete: function(){
+        w.tween.to(g, {x: 300}, {time: 1, delay: 2, ease: 'easeOutBounce', oncomplete: function(){
+            w.tween.to(g, {x: 10}, {time: 1, ease: 'easeOutBounce', oncomplete: function(){
                 animPlataform();
             }});
         }});

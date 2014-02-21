@@ -5,7 +5,7 @@ var CollisionData   = require('./CollisionData'),
 function Collide () {}
 
 Collide.prototype.check = function(s, o){
-    var collided = false, overlap = new V2(0, 0), a, b, x, y, c;
+    var collided = false, overlap = new V2(0, 0), a, b, x, y, c, collideY;
 
     if (s.x <= o.x) { a = s; b = o; } else { a = o; b = s; }
     x = b.x - (a.x + a.width);
@@ -20,11 +20,13 @@ Collide.prototype.check = function(s, o){
     }
 
     if(collided){
+        console.log(overlap);
         c = new CollisionData(s, o);
 
         if(!s.sensor && !o.sensor){
             if(!o.config.plataform || (o.config.plataform && s.cache.y < s.cache.y)) {
-                if (overlap.x < overlap.y) {
+                collideY = overlap.x < overlap.y;
+                if (collideY) {
                     s.y += overlap.y;
                 } else {
                     s.x += overlap.x;
@@ -35,11 +37,11 @@ Collide.prototype.check = function(s, o){
                 }else{
                     this.normal(c);
 
-                    if(overlap.x < 0)
-                        s.velocity.x = 0;
-
-                    if(overlap.y < 0)
+                    if (collideY) {
                         s.velocity.y = 0;
+                    } else {
+                        s.velocity.x = 0;
+                    }
                 }
 
                 s.collisions.add(c);

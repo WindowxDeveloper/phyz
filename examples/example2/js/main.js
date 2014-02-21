@@ -8,6 +8,8 @@ preloader.add('ground', 'http://placehold.it/480x50');
 preloader.on('complete', function(){
     console.log('LOAD COMPLETE');
 
+    w.settings.DEBUG_DRAW = false;
+    w.settings.FPS_METTER = false;
     w.camera.width = 480;
     w.camera.height = 320;
     w.camera.stage.width = 960;
@@ -17,7 +19,7 @@ preloader.on('complete', function(){
     s.view = new createjs.Bitmap(preloader.get('square'));
     s.width = 50;
     s.height = 50;
-    s.x = 150;
+    s.x = 0;
     s.y = 0;
 
     var g = new P.Sprite('static', false);
@@ -37,8 +39,8 @@ preloader.on('complete', function(){
     });
 
     var animPlataform = function(){
-        P.Tween.to(g, {x: 300}, {time: 1, delay: 2, ease: 'easeOutBounce', oncomplete: function(){
-            P.Tween.to(g, {x: 10}, {time: 1, ease: 'easeOutBounce', oncomplete: function(){
+        w.tween.to(g, {x: 200}, {time: 1, delay: 2, ease: 'easeOutBounce', oncomplete: function(){
+            w.tween.to(g, {x: 10}, {time: 1, ease: 'easeOutBounce', oncomplete: function(){
                 animPlataform();
             }});
         }});
@@ -60,7 +62,7 @@ preloader.on('complete', function(){
     s2.view = new createjs.Bitmap(preloader.get('square'));
     s2.width = 50;
     s2.height = 50;
-    s2.x = 150;
+    s2.x = 0;
     s2.y = 0;
 
     var g2 = new P.Sprite('static', false);
@@ -74,15 +76,14 @@ preloader.on('complete', function(){
     w2.addChild(g2);
 
     document.addEventListener(P.util.events.START, function(e){
-        s2.velocity.y = -300;
-        s2.velocity.x = 100;
+        s2.velocity.x = 150;
 
         e.preventDefault();
     });
 
     var animPlataform2 = function(){
-        P.Tween.to(g2, {x: 300}, {time: 1, delay: 2, ease: 'easeInBounce', oncomplete: function(){
-            P.Tween.to(g2, {x: 10}, {time: 1, ease: 'easeInBounce', oncomplete: function(){
+        w.tween.to(g2, {x: 200}, {time: 1, delay: 2, ease: 'easeInBounce', oncomplete: function(){
+            w.tween.to(g2, {x: 10}, {time: 1, ease: 'easeInBounce', oncomplete: function(){
                 animPlataform2();
             }});
         }});

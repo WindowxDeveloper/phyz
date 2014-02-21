@@ -12,10 +12,9 @@ Phyz is a lightweight, fast and simple game engine for use in desktops and mobil
 - Tween API.
 
 ## Todo
-- Não quero depender dos elementos estarem adicionado no mundo para
-- Paralax
 - Add TiledIndex (and integrate with automate Stage size changes)
-- Tween API
+- Collide adjusts
+- Paralax
 - Extends sprites (entity)
 - Create Drivers for easeljs and pixijs (eg: DisplayObject.prototype.container = new createjs.Container;)
 - Layers display object

@@ -18,6 +18,10 @@ var EventHandler        = require('./util/EventHandler'),
     V2                  = require('./V2'),
     TiledIndex          = require('./TiledIndex');
 
+var timestamp = function () {
+    return ((window.performance && window.performance.now) ? window.performance.now() : new Date().getTime());
+};
+
 function World (el){
     this._sprites   = [];
     this._stage     = null;
@@ -36,13 +40,25 @@ function World (el){
         resistance: new V2(200, 0)
     };
 
+    this.time = {
+        now:    0,
+        dt:     0,
+        time:   0,
+        last:   timestamp()
+    };
+
     Object.defineProperty(this, 'paused', {
         get: function(){ return this._paused; },
         set: function(v){
-            this._vi_pausedew = v;
+            this._paused = v;
+
+            if (!this._paused) {
+                this.time.last = this.time.now;
+            }
         }
     });
 
+    this._fpsmeter = this.settings.FPS_METER ? new FPSMeter({decimals: 0, graph: true, theme: 'dark', heat:  true, left: 'auto', top: '5px', right: '5px', bottom: 'auto'}) : null;
     this._stage = new createjs.Stage(this.camera.el);
     this._stage.addChild(this.camera.stage.layer);
 }
@@ -64,31 +80,21 @@ World.prototype.addChild = function (s) {
 World.prototype.start = function () {
     var _this = this;
 
-    var timestamp = function () {
-        return ((window.performance && window.performance.now) ? window.performance.now() : new Date().getTime());
-    };
+    var _frame = function(){
+        if (!_this.paused) {
+            _this.time.now = timestamp();
+            _this.time.dt = Math.min(1, (_this.time.now - _this.time.last) / 1000);
+            _this.time.time = _this.time.time + _this.time.dt;
+            _this._update(_this.time.dt);
+            _this._render();
+            _this.time.last = _this.time.now;
+            if (_this._fpsmeter) _this._fpsmeter.tick();
+        }
+        requestAnimationFrame(_frame);
+    }
 
-    var frame = function () {
-        now = timestamp();
-        time = time + Math.min(1, (now - last) / 1000);
-        dt = Math.min(1, (now - last) / 1000);
-        _this._update(dt);
-        _this._render();
-        last = now;
-        if (fpsmeter) fpsmeter.tick();
-        requestAnimationFrame(frame);
-    };
-
-    var now,
-        dt       = 0,
-        time     = 0,
-        last     = timestamp(),
-        fpsmeter = this.settings.FPS_METER ? new FPSMeter({decimals: 0, graph: true, theme: 'dark', heat:  true, left: 'auto', top: '5px', right: '5px', bottom: 'auto'}) : null;
-
-    // this.TiledIndex = new TiledIndex();
-
-    if (fpsmeter) fpsmeter.tickStart();
-    requestAnimationFrame(frame);
+    if (this._fpsmeter) this._fpsmeter.tickStart();
+    requestAnimationFrame(_frame);
 };
 
 World.prototype._update = function(dt){
