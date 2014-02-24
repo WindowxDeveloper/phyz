@@ -1,9 +1,9 @@
 var Stage = require('./Stage');
 
-function Camera (el){
+function Camera (el, layers){
     this.el         = el;
-    this.stage      = new Stage();
-    this.following  = null;
+    this.stage      = new Stage(layers);
+    this.target     = null;
     this._x         = 0;
     this._y         = 0;
     this._width     = 0;
@@ -41,5 +41,26 @@ function Camera (el){
         }
     });
 }
+
+Camera.tick = function (c) {
+    var limit;
+    if (c.target) {
+        limit = new V2(c.stage.width - c.width, c.stage.height - c.height);
+        c.x = c.target.x + (c.target.width/2) - (c.width/2);
+        c.y = c.target.y + (c.target.height/2) - (c.height/2);
+
+        if (c.x < 0) {
+            c.x = 0;
+        } else if (c.x > limit.x) {
+            c.x = limit.x;
+        }
+
+        if (c.y < 0) {
+            c.y = 0;
+        } else if (c.y > limit.y) {
+            c.y = limit.y;
+        }
+    }
+};
 
 module.exports = Camera;

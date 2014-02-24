@@ -1,30 +1,22 @@
 var Container = require('./Container');
 
-function Stage () {
-    Container.apply(this);
 
-    this.x = 0;
-    this.y = 0;
-    this.width = 0;
-    this.height = 0;
-    this.layers = {};
-}
+var Stage = Container.extend({
+    init: function(layers){
+        var i;
+        layers = layers || ['default'];
 
-Stage.prototype = new Container();
+        this.super.init();
 
-Stage.prototype.createLayer = function(name){
-    var l = new Container();
-    this.addChild(l);
-    this.layers[name] = l;
-};
+        this.layers = {};
 
-Stage.prototype.removeLayer = function(name){
-    this.removeChild(this.layers[name]);
-    delete this.layers[name];
-};
-
-Stage.prototype.getLayer = function(name){
-    return this.layers[name];
-};
+        for (i = 0; i < layers.length; i++) {
+            this.layers[layers[i]] = new Container();
+        }
+    },
+    layer: function(name){
+        return this.layers[name];
+    }
+});
 
 module.exports = Stage;

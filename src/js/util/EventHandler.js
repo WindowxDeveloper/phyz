@@ -23,15 +23,17 @@ var EventHandler = (function(){
     return {
         init: function (O) {
             O.on = function (name, fn) {
-                if(!this.event) this.event = new EventHandler(this);
-                this.event.on(name, fn);
+                if (!this._event) { this._event = new EventHandler(this); }
+
+                this._event.on(name, fn);
             };
 
             O.trigger = function (name, params, retroative) {
-                if(!this.event) this.event = new EventHandler(this);
-                this.event.trigger(name, params);
+                if (!this._event) { this._event = new EventHandler(this); }
 
-                if(retroative && this.parent){
+                this._event.trigger(name, params);
+
+                if (retroative && this.parent){
                     this.parent.trigger(name, params);
                 }
             };

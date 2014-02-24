@@ -25,11 +25,11 @@ function Tween () {
 }
 
 Tween.prototype.to = function (o, props, params) {
-    this.create(o, props, params, false);
+    return this.create(o, props, params, false);
 };
 
 Tween.prototype.from = function (o, props, params) {
-    this.create(o, props, params, true);
+    return this.create(o, props, params, true);
 };
 
 Tween.prototype.create = function (o, props, params, isFrom) {
@@ -59,18 +59,31 @@ Tween.prototype.create = function (o, props, params, isFrom) {
 
     t = new TweenData(o, params, from, to);
 
-    this._tweens.push(t);
+    return t;
 };
 
-Tween.prototype.stop = function (o) {
-    var i, tweens = this._tweens, len = tweens.length, t;
+Tween.tick = function () {
+    var i, j, tweens = this.tween._tweens, len = tweens.length, t;
 
     for (i = 0; i < len; i++) {
         t = tweens[i];
-        if (t.o === o) {
-            this._tweens.remove(t);
+
+        t.dt += dt;
+        t.dt = (t.dt > t.p.time ? t.p.time : t.dt);
+
+        if (t.dt > 0) {
+            for (j in t.from) {
+                t.o[j] = Easings[t.p.ease](t.dt, t.from[j], t.to[j] - t.from[j], t.p.time);
+            }
+        }
+
+        if (t.dt === t.p.time) {
+            if (t.p.oncomplete) {
+                t.p.oncomplete.apply(t.o);
+            }
+            this.tween._tweens.remove(t);
         }
     }
-};
+}
 
 module.exports = Tween;

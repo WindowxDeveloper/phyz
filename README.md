@@ -25,3 +25,69 @@ Phyz is a lightweight, fast and simple game engine for use in desktops and mobil
         - debug
 - Add plataform type param (top, right, bottom or left)
 - Tiled map editor
+
+
+Phyz
+    World
+        Camera
+            Stage
+                Layers
+                    Sprites
+
+Preloader
+    add
+    get (after loaded)
+    load
+
+Tween
+    to (s, props, params)
+    from (s, props, params)
+
+Camera
+    folow (sprite)
+
+Container
+    addChild
+    removeChild
+    on
+    trigger
+
+    > Sprite
+        extends
+        remove
+
+    > Stage
+        _index
+        layers
+            add (new Layer)
+
+        addChild (sprite, layer)
+        removeChild (sprite)
+
+Paralax
+
+World
+    sprites
+    paralax
+    tweens
+
+    camera
+        stage
+
+
+var Player = P.Sprite.extends({
+    init: function(){
+        this.view =
+
+        this.tick = function(){
+
+        }
+    }
+});
+
+var p = new Player();
+
+W.camera.stage.layer['bg'].addChild(sprite);
+W.camera.stage.layer['bg'].removeChild(sprite);
+
+

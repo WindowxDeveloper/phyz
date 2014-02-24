@@ -22,13 +22,13 @@ var timestamp = function () {
     return ((window.performance && window.performance.now) ? window.performance.now() : new Date().getTime());
 };
 
-function World (el){
+function World (el, layers){
     this._sprites   = [];
+    this._tweens    = [];
     this._stage     = null;
     this._paused    = false;
 
-    this.camera     = new Camera(el);
-    this.tween      = new Tween();
+    this.camera     = new Camera(el, layers);
 
     this.settings   = {
         DEBUG_DRAW: true,
@@ -60,21 +60,40 @@ function World (el){
 
     this._fpsmeter = this.settings.FPS_METER ? new FPSMeter({decimals: 0, graph: true, theme: 'dark', heat:  true, left: 'auto', top: '5px', right: '5px', bottom: 'auto'}) : null;
     this._stage = new createjs.Stage(this.camera.el);
-    this._stage.addChild(this.camera.stage.layer);
+    this._stage.addChild(this.camera.stage._container);
 }
 
 World.prototype.removeChild = function (s) {
     this._sprites.remove(s);
-    this.camera.stage.layer.removeChild(s.layer);
+    this.camera.stage._container.removeChild(s._container);
 };
 
 World.prototype.addChild = function (s) {
     s._world = this;
 
-    this.camera.stage.layer.addChild(s.layer);
+    this.camera.stage._container.addChild(s._container);
 
     this._sprites.push(s);
     if (this.settings.DEBUG_DRAW) s.debugDraw();
+};
+
+World.prototype.addTween = function (t) {
+    this._tweens.push(t);
+};
+
+World.prototype.removeTween = function (t) {
+    this._tweens.remove(t);
+};
+
+World.prototype.removeTweensOf = function (o) {
+    var i, tweens = this._tweens, len = tweens.length, t;
+
+    for (i = 0; i < len; i++) {
+        t = tweens[i];
+        if (t.o === o) {
+            this._tweens.remove(t);
+        }
+    }
 };
 
 World.prototype.start = function () {
@@ -98,103 +117,11 @@ World.prototype.start = function () {
 };
 
 World.prototype._update = function(dt){
-    // Tween
-    var i, j, tweens = this.tween._tweens, len = tweens.length, t;
 
-    for (i = 0; i < len; i++) {
-        t = tweens[i];
 
-        t.dt += dt;
-        t.dt = (t.dt > t.p.time ? t.p.time : t.dt);
+    Sprite.tick(this._sprites);
 
-        if (t.dt > 0) {
-            for (j in t.from) {
-                t.o[j] = Easings[t.p.ease](t.dt, t.from[j], t.to[j] - t.from[j], t.p.time);
-            }
-        }
-
-        if (t.dt === t.p.time) {
-            if (t.p.oncomplete) {
-                t.p.oncomplete.apply(t.o);
-            }
-            this.tween._tweens.remove(t);
-        }
-    }
-
-    // Sprites
-    var sprites = this._sprites, s, acceleration, resistance, others, o, i, j, cMax;
-
-    for (i = 0; i < sprites.length; i++) {
-        s = sprites[i];
-
-        s.setCache();
-
-        if (s.tick) {
-            s.tick(dt);
-        }
-
-        if (s.type === 'dynamic') {
-            acceleration = new V2(
-                (this.physics.acceleration.x + s.acceleration.x) * dt,
-                (this.physics.acceleration.y + s.acceleration.y) * dt
-            );
-
-            resistance = new V2(
-                (this.physics.resistance.x + s.resistance.x) * dt,
-                (this.physics.resistance.y + s.resistance.y) * dt
-            );
-
-            s.velocity.add(acceleration);
-
-            if (Math.abs(s.velocity.x) > resistance.x) {
-                s.velocity.x += (s.velocity.x > 0) ? -resistance.x : resistance.x;
-            } else {
-                s.velocity.x = 0;
-            }
-
-            if (Math.abs(s.velocity.y) > resistance.y) {
-                s.velocity.y += (s.velocity.y > 0) ? -resistance.y : resistance.y;
-            } else {
-                s.velocity.y = 0;
-            }
-
-            s.velocity.x = (s.velocity.x < s.config.minVelocity.x) ? s.config.minVelocity.x : s.velocity.x;
-            s.velocity.y = (s.velocity.y < s.config.minVelocity.y) ? s.config.minVelocity.y : s.velocity.y;
-            s.velocity.x = (s.velocity.x > s.config.maxVelocity.x) ? s.config.maxVelocity.x : s.velocity.x;
-            s.velocity.y = (s.velocity.y > s.config.maxVelocity.y) ? s.config.maxVelocity.y : s.velocity.y;
-
-            s.y += s.velocity.y * dt;
-            s.x += s.velocity.x * dt;
-
-            // others = this.TiledIndex.getOthers(s);
-
-            for (j = 0; j < sprites.length; j++) {
-                o = sprites[j];
-                if (s !== o) {
-                    Collide.check(s, o);
-                }
-            }
-        }
-    }
-
-    // Camera
-    if (this.camera.following) {
-        cMax = new V2(this.camera.stage.width - this.camera.width, this.camera.stage.height - this.camera.height);
-        this.camera.x = this.camera.following.x + (this.camera.following.width/2) - (this.camera.width/2);
-        this.camera.y = this.camera.following.y + (this.camera.following.height/2) - (this.camera.height/2);
-
-        if (this.camera.x < 0) {
-            this.camera.x = 0;
-        } else if (this.camera.x > cMax.x) {
-            this.camera.x = cMax.x;
-        }
-
-        if (this.camera.y < 0) {
-            this.camera.y = 0;
-        } else if (this.camera.y > cMax.y) {
-            this.camera.y = cMax.y;
-        }
-    }
+    Camera.tick(this.camera);
 };
 
 World.prototype._render = function(){
@@ -203,12 +130,12 @@ World.prototype._render = function(){
     for (i = 0; i < this._sprites.length; i++) {
         s = this._sprites[i];
 
-        s.layer.x = Math.round(s.x);
-        s.layer.y = Math.round(s.y);
+        s._container.x = Math.round(s.x);
+        s._container.y = Math.round(s.y);
     }
 
-    this.camera.stage.layer.x = Math.round(this.camera.stage.x);
-    this.camera.stage.layer.y = Math.round(this.camera.stage.y);
+    this.camera.stage._container.x = Math.round(this.camera.stage.x);
+    this.camera.stage._container.y = Math.round(this.camera.stage.y);
 
     this._stage.update();
 };

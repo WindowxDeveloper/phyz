@@ -1,0 +1,15 @@
+{
+  "name": "phyz",
+  "main": "src/js/Phyz.js",
+  "scripts": [
+    "src/js/Phyz.js",
+    "src/js/TiledIndex.js",
+    "src/js/V2.js",
+    "src/js/World.js"
+  ],
+  "styles": [],
+  "paths": [],
+  "local": [],
+  "dependencies": {},
+  "remotes": []
+}
