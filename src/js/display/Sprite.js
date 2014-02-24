@@ -125,7 +125,7 @@ var Sprite = Container.extend({
     }
 });
 
-Sprite.tick = function (sprites) {
+Sprite.tick = function (dt, sprites) {
     var s, acceleration, resistance, others, o, i, j;
 
     for (i = 0; i < sprites.length; i++) {

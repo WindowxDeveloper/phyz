@@ -118,10 +118,9 @@ World.prototype.start = function () {
 
 World.prototype._update = function(dt){
 
-
-    Sprite.tick(this._sprites);
-
-    Camera.tick(this.camera);
+    Tween.tick(dt, this._tweens);
+    Sprite.tick(dt, this._sprites);
+    Camera.tick(dt, this.camera);
 };
 
 World.prototype._render = function(){

@@ -42,7 +42,7 @@ function Camera (el, layers){
     });
 }
 
-Camera.tick = function (c) {
+Camera.tick = function (dt, c) {
     var limit;
     if (c.target) {
         limit = new V2(c.stage.width - c.width, c.stage.height - c.height);

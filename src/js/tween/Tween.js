@@ -62,11 +62,11 @@ Tween.prototype.create = function (o, props, params, isFrom) {
     return t;
 };
 
-Tween.tick = function () {
-    var i, j, tweens = this.tween._tweens, len = tweens.length, t;
+Tween.tick = function (dt, tweens) {
+    var i, j, t, _tweens = tweens, len = tweens.length;
 
     for (i = 0; i < len; i++) {
-        t = tweens[i];
+        t = _tweens[i];
 
         t.dt += dt;
         t.dt = (t.dt > t.p.time ? t.p.time : t.dt);
@@ -81,7 +81,7 @@ Tween.tick = function () {
             if (t.p.oncomplete) {
                 t.p.oncomplete.apply(t.o);
             }
-            this.tween._tweens.remove(t);
+            _tweens.remove(t);
         }
     }
 }
