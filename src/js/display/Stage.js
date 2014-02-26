@@ -1,6 +1,5 @@
 var Container = require('./Container');
 
-
 var Stage = Container.extend({
     init: function(layers){
         var i;

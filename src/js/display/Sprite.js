@@ -135,7 +135,7 @@ Sprite.tick = function (dt, sprites) {
 
         if (s.tick) {
             s.tick(dt);
-        }
+        }0
 
         if (s.type === 'dynamic') {
             acceleration = new V2(
