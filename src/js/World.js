@@ -63,18 +63,14 @@ function World (el, layers){
     this._stage.addChild(this.camera.stage._container);
 }
 
-World.prototype.removeChild = function (s) {
-    this._sprites.remove(s);
-    this.camera.stage._container.removeChild(s._container);
-};
-
-World.prototype.addChild = function (s) {
+World.prototype.addSprite = function (s) {
     s._world = this;
 
-    this.camera.stage._container.addChild(s._container);
-
     this._sprites.push(s);
-    if (this.settings.DEBUG_DRAW) s.debugDraw();
+};
+
+World.prototype.removeSprite = function (s) {
+    this._sprites.remove(s);
 };
 
 World.prototype.addTween = function (t) {
@@ -117,10 +113,9 @@ World.prototype.start = function () {
 };
 
 World.prototype._update = function(dt){
-
-    Tween.tick(dt, this._tweens);
-    Sprite.tick(dt, this._sprites);
-    Camera.tick(dt, this.camera);
+    Tween.tick(dt, this);
+    Sprite.tick(dt, this);
+    Camera.tick(dt, this);
 };
 
 World.prototype._render = function(){

@@ -42,8 +42,9 @@ function Camera (el, layers){
     });
 }
 
-Camera.tick = function (dt, c) {
-    var limit;
+Camera.tick = function (dt, world) {
+    var c = world.camera, limit;
+
     if (c.target) {
         limit = new V2(c.stage.width - c.width, c.stage.height - c.height);
         c.x = c.target.x + (c.target.width/2) - (c.width/2);

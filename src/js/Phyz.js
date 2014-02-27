@@ -21,9 +21,9 @@ if (!Array.prototype.remove) {
             what = a[--L];
             while ((ax = this.indexOf(what)) !== -1) {
                 this.splice(ax, 1);
-            } 
-        }     
-        return this; 
+            }
+        }
+        return this;
     };
 }
 
@@ -34,21 +34,22 @@ var EventHandler        = require('./util/EventHandler'),
     Sprite              = require('./display/Sprite'),
     Paralax             = require('./display/Paralax'),
     Preloader           = require('./preloader/Preloader'),
+    Tween               = require('./tween/Tween'),
     V2                  = require('./V2'),
     World               = require('./World');
 
 var Phyz = {
-    util: {
+    Util: {
         device: Device,
-        events: Events,
-        EventHandler: EventHandler
+        events: Events
     },
-    V2: V2,
-    Preloader: Preloader,
-    Container: Container,
-    Sprite: Sprite,
-    Paralax: Paralax,
-    World: World
+    V2:         V2,
+    Preloader:  Preloader,
+    Tween:      Tween,
+    Container:  Container,
+    Sprite:     Sprite,
+    Paralax:    Paralax,
+    World:      World
 };
 
 window.P = window.Phyz = Phyz;

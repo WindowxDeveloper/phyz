@@ -16,7 +16,6 @@ function TweenData (o, p, f, t) {
 }
 
 function Tween () {
-    this._tweens = [];
     this.defaults = {
         time: 0.6,
         delay: 0,
@@ -62,8 +61,9 @@ Tween.prototype.create = function (o, props, params, isFrom) {
     return t;
 };
 
-Tween.tick = function (dt, tweens) {
-    var i, j, t, _tweens = tweens, len = tweens.length;
+var t = new Tween();
+t.tick = function (dt, world) {
+    var i, j, t, _tweens = world._tweens, len = _tweens.length;
 
     for (i = 0; i < len; i++) {
         t = _tweens[i];
@@ -81,9 +81,9 @@ Tween.tick = function (dt, tweens) {
             if (t.p.oncomplete) {
                 t.p.oncomplete.apply(t.o);
             }
-            _tweens.remove(t);
+            world._tweens.remove(t);
         }
     }
 }
 
-module.exports = Tween;
+module.exports = t;

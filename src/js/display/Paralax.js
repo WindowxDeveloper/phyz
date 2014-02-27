@@ -1,5 +1,5 @@
 function Paralax (view, factor) {
-    var w           = image.width + window.Phyz.Camera.width,
+    var w           = image.width + this._world.camera.width,
         h           = image.height;
 
     this._container = new createjs.Container();
@@ -15,6 +15,10 @@ function Paralax (view, factor) {
     this.factor     = factor;
 
     this._container.addChild(this.view);
+}
+
+Paralax.tick = function () {
+
 }
 
 module.exports = Paralax;

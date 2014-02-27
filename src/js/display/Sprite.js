@@ -9,6 +9,7 @@ var Sprite = Container.extend({
         this._tiles         = []; // Aux for collision detection
         this._debug         = null; // Debug view
         this._world         = null;
+        this._layer         = null;
         // this._stage         = null;
         // this._layer         = null;
 
@@ -47,7 +48,7 @@ var Sprite = Container.extend({
             set: function(v){
                 this._width = v;
 
-                if (this.world && this.world.settings.DEBUG_DRAW) this.debugDraw();
+                if (this.layer && this.layer.settings.DEBUG_DRAW) this.debugDraw();
             }
         });
 
@@ -56,7 +57,7 @@ var Sprite = Container.extend({
             set: function(v){
                 this._height = v;
 
-                if (this.world && this.world.settings.DEBUG_DRAW) this.debugDraw();
+                if (this._layer && this._layer.settings.DEBUG_DRAW) this.debugDraw();
             }
         });
 
@@ -101,11 +102,23 @@ var Sprite = Container.extend({
             }
         });
 
+        Object.defineProperty(this, 'layer', {
+            get: function(){
+                return this.root._layer;
+            }
+        });
+
         Object.defineProperty(this, 'world', {
             get: function(){
                 return this.root._world;
             }
         });
+
+        this.on('added', function () {
+            /*if (this.layer.world.settings.DEBUG_DRAW) {
+                this.debugDraw();
+            }*/
+        })
     },
     setCache: function () {
         this.cache.x        = this.x;
@@ -125,8 +138,8 @@ var Sprite = Container.extend({
     }
 });
 
-Sprite.tick = function (dt, sprites) {
-    var s, acceleration, resistance, others, o, i, j;
+Sprite.tick = function (dt, world) {
+    var s, acceleration, resistance, others, o, i, j, sprites = world._sprites;
 
     for (i = 0; i < sprites.length; i++) {
         s = sprites[i];
