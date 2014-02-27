@@ -1,8 +1,9 @@
 var Container = require('./Container');
+var Layer = require('./Layer');
 
 var Stage = Container.extend({
     init: function(layers){
-        var i;
+        var i, l;
         layers = layers || ['default'];
 
         this.super.init();
@@ -10,7 +11,8 @@ var Stage = Container.extend({
         this.layers = {};
 
         for (i = 0; i < layers.length; i++) {
-            this.layers[layers[i]] = new Container();
+            l = new Layer();
+            this.layers[layers[i]] = ;
         }
     },
     layer: function(name){

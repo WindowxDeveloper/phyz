@@ -5,7 +5,6 @@ var Container = Class.extend({
     init: function(){
         // Draw/View properties
         this._container     = new createjs.Container();
-        this._view          = null;
 
         // Container properties
         this.parent         = null;
@@ -14,21 +13,6 @@ var Container = Class.extend({
         // Position properties
         this.x              = 0;
         this.y              = 0;
-        this.width          = 0;
-        this.height         = 0;
-
-        // Define setter and getter
-        Object.defineProperty(this, 'view', {
-            get: function(){ return this._view; },
-            set: function(v){
-                if (this._view) {
-                    this._container.removeChild(this._view);
-                }
-
-                this._view = v;
-                this._container.addChild(this._view);
-            }
-        });
     },
     addChild: function(child){
         child.parent = this;

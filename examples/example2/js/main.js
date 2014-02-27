@@ -6,8 +6,7 @@ var Preloader   = P.Preloader,
 
 var c = document.querySelector('#game1'), // Canvas
     l = ['bg', 'default'], // Layers
-    w = new World(c, l),
-    p = new Preloader();
+    w = new World(c, l);
 
 w.settings.DEBUG_DRAW = true;
 w.settings.FPS_METTER = true;
