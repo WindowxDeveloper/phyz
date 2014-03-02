@@ -1,18 +1,21 @@
-var Container = require('./Container');
-var Layer = require('./Layer');
+var Container   = require('./Container'),
+    Layer       = require('./Layer');
+    // TiledIndex  = require('../TiledIndex');
+
 
 var Stage = Container.extend({
-    init: function(layers){
+    init: function(world, layers){
         var i, l;
         layers = layers || ['default'];
 
-        this.super.init();
+        Stage.super(this).init();
 
+        this.world = world;
         this.layers = {};
 
         for (i = 0; i < layers.length; i++) {
-            l = new Layer();
-            this.layers[layers[i]] = ;
+            this.layers[layers[i]] = new Layer(layers[i]);
+            this.addChild(this.layers[layers[i]]);
         }
     },
     layer: function(name){

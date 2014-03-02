@@ -24,11 +24,22 @@ function Tween () {
 }
 
 Tween.prototype.to = function (o, props, params) {
-    return this.create(o, props, params, false);
+    this.create(o, props, params, false);
 };
 
 Tween.prototype.from = function (o, props, params) {
-    return this.create(o, props, params, true);
+    this.create(o, props, params, true);
+};
+
+Tween.prototype.clear = function (o) {
+    var i, tweens = o.world._tweens, len = tweens.length, t;
+
+    for (i = 0; i < len; i++) {
+        t = tweens[i];
+        if (t.o === o) {
+            o.world._tweens.remove(t);
+        }
+    }
 };
 
 Tween.prototype.create = function (o, props, params, isFrom) {
@@ -58,15 +69,15 @@ Tween.prototype.create = function (o, props, params, isFrom) {
 
     t = new TweenData(o, params, from, to);
 
-    return t;
+    o.world._tweens.push(t);
 };
 
 var t = new Tween();
 t.tick = function (dt, world) {
-    var i, j, t, _tweens = world._tweens, len = _tweens.length;
+    var i, j, t, tweens = world._tweens, len = tweens.length;
 
     for (i = 0; i < len; i++) {
-        t = _tweens[i];
+        t = tweens[i];
 
         t.dt += dt;
         t.dt = (t.dt > t.p.time ? t.p.time : t.dt);

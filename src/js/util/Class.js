@@ -4,7 +4,7 @@ Class.prototype.init = function () {};
 
 Class.extend = function (p) {
     var i,
-        _class = new Function('return function(){ var i; this.super = {}; for (i in this._super) { if (i !== "_super") { this.super[i] = this._super[i].bind(this); } } this.init.apply(this, arguments); };')();
+        _class = new Function('return function(){ this.init.apply(this, arguments); };')();
 
     _class.extend = this.extend;
 
@@ -16,7 +16,16 @@ Class.extend = function (p) {
         _class.prototype[i] = p[i];
     }
 
-    _class.prototype._super = this.prototype;
+    _class._super = this.prototype;
+
+    _class.super = function (scope) {
+        var i, _super = {};
+        for (i in this._super) {
+            _super[i] = this._super[i].bind(scope);
+        }
+
+        return _super;
+    }
 
     return _class;
 }

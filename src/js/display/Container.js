@@ -2,7 +2,7 @@ var EventHandler = require('../util/EventHandler');
 var Class = require('../util/Class');
 
 var Container = Class.extend({
-    init: function(){
+    init: function () {
         // Draw/View properties
         this._container     = new createjs.Container();
 
@@ -14,7 +14,7 @@ var Container = Class.extend({
         this.x              = 0;
         this.y              = 0;
     },
-    addChild: function(child){
+    addChild: function (child) {
         child.parent = this;
 
         if (this._container && child._container) {
@@ -26,7 +26,7 @@ var Container = Class.extend({
         this.trigger('add', child);
         child.trigger('added', this);
     },
-    removeChild: function(child){
+    removeChild: function (child) {
         if (this._container && child._container) {
             this._container.removeChild(child._container);
         }
@@ -36,7 +36,7 @@ var Container = Class.extend({
         this.trigger('remove', child);
         child.trigger('removed', this);
     },
-    remove: function(){
+    remove: function () {
         if (this.parent) {
             this.parent.removeChild(this);
         }

@@ -1,8 +1,10 @@
-var Stage = require('./Stage');
+var Stage = require('./Stage'),
+    V2    = require('../V2');
 
-function Camera (el, layers){
+function Camera (world, el, layers){
     this.el         = el;
-    this.stage      = new Stage(layers);
+    this.world      = world;
+    this.stage      = new Stage(world, layers);
     this.target     = null;
     this._x         = 0;
     this._y         = 0;

@@ -1,14 +1,10 @@
 var Container = require('./Container');
 
 var Layer = Container.extend({
-    init: function(layers){
-        this.super.init();
+    init: function(name){
+        Layer.super(this).init();
 
-        this.on('add', function (child) {
-            if (child._world !== 'undefined') {
-                child._world = this._world;
-            }
-        });
+        this.name = name;
     }
 });
 

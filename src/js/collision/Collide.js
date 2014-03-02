@@ -20,7 +20,6 @@ Collide.prototype.check = function(s, o){
     }
 
     if(collided){
-        console.log(overlap);
         c = new CollisionData(s, o);
 
         if(!s.sensor && !o.sensor){

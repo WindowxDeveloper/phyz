@@ -3,32 +3,22 @@
 */
 
 var EventHandler        = require('./util/EventHandler'),
-    Device              = require('./util/Device'),
-    Events              = require('./util/Events'),
-    Collisions          = require('./collision/Collisions'),
-    Collide             = require('./collision/Collide'),
-    Container           = require('./display/Container'),
-    Sprite              = require('./display/Sprite'),
     Camera              = require('./display/Camera'),
-    Stage               = require('./display/Stage'),
     Paralax             = require('./display/Paralax'),
     Tween               = require('./tween/Tween'),
-    Easings             = require('./tween/Easings'),
-    Preloader           = require('./preloader/Preloader'),
-    V2                  = require('./V2'),
-    TiledIndex          = require('./TiledIndex');
+    V2                  = require('./V2');
 
 var timestamp = function () {
     return ((window.performance && window.performance.now) ? window.performance.now() : new Date().getTime());
 };
 
 function World (el, layers){
-    this._sprites   = [];
+    this._bodies   = [];
     this._tweens    = [];
     this._stage     = null;
     this._paused    = false;
 
-    this.camera     = new Camera(el, layers);
+    this.camera     = new Camera(this, el, layers);
 
     this.settings   = {
         DEBUG_DRAW: true,
@@ -63,35 +53,6 @@ function World (el, layers){
     this._stage.addChild(this.camera.stage._container);
 }
 
-World.prototype.addSprite = function (s) {
-    s._world = this;
-
-    this._sprites.push(s);
-};
-
-World.prototype.removeSprite = function (s) {
-    this._sprites.remove(s);
-};
-
-World.prototype.addTween = function (t) {
-    this._tweens.push(t);
-};
-
-World.prototype.removeTween = function (t) {
-    this._tweens.remove(t);
-};
-
-World.prototype.removeTweensOf = function (o) {
-    var i, tweens = this._tweens, len = tweens.length, t;
-
-    for (i = 0; i < len; i++) {
-        t = tweens[i];
-        if (t.o === o) {
-            this._tweens.remove(t);
-        }
-    }
-};
-
 World.prototype.start = function () {
     var _this = this;
 
@@ -114,15 +75,15 @@ World.prototype.start = function () {
 
 World.prototype._update = function(dt){
     Tween.tick(dt, this);
-    Sprite.tick(dt, this);
+    Body.tick(dt, this);
     Camera.tick(dt, this);
 };
 
 World.prototype._render = function(){
     var s, i;
 
-    for (i = 0; i < this._sprites.length; i++) {
-        s = this._sprites[i];
+    for (i = 0; i < this._bodies.length; i++) {
+        s = this._bodies[i];
 
         s._container.x = Math.round(s.x);
         s._container.y = Math.round(s.y);

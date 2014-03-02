@@ -27,12 +27,11 @@ if (!Array.prototype.remove) {
     };
 }
 
-var EventHandler        = require('./util/EventHandler'),
-    Device              = require('./util/Device'),
+var Device              = require('./util/Device'),
     Events              = require('./util/Events'),
-    Container           = require('./display/Container'),
     Sprite              = require('./display/Sprite'),
-    Paralax             = require('./display/Paralax'),
+    Body                = require('./display/Body'),
+    // Paralax             = require('./display/Paralax'),
     Preloader           = require('./preloader/Preloader'),
     Tween               = require('./tween/Tween'),
     V2                  = require('./V2'),
@@ -43,13 +42,13 @@ var Phyz = {
         device: Device,
         events: Events
     },
-    V2:         V2,
-    Preloader:  Preloader,
-    Tween:      Tween,
-    Container:  Container,
-    Sprite:     Sprite,
-    Paralax:    Paralax,
-    World:      World
+    V2        : V2,
+    Preloader : Preloader,
+    Tween     : Tween,
+    Sprite    : Sprite,
+    Body      : Body,
+    // Paralax   : Paralax,
+    World     : World
 };
 
 window.P = window.Phyz = Phyz;

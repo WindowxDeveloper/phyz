@@ -1,17 +1,15 @@
-var Container   = require('./Sprite'),
+var Sprite      = require('./Sprite'),
+    Layer       = require('./Layer'),
     Collisions  = require('../collision/Collisions'),
+    Collide     = require('../collision/Collide'),
     V2          = require('../V2');
 
 var Body = Sprite.extend({
     init: function (type, sensor) {
-        this.super.init();
+        Body.super(this).init();
 
-        this._view          = null;
         this._debug         = null; // Debug view
         this._tiles         = []; // Aux for collision detection
-        this._world         = null;
-        this._stage         = null;
-        this._layer         = null;
 
         // body type properties
         this.type           = type || 'static'; // Values: dynamic or static
@@ -48,7 +46,7 @@ var Body = Sprite.extend({
             set: function(v){
                 this._width = v;
 
-                if (this.layer && this.layer.settings.DEBUG_DRAW) this.debugDraw();
+                if (this.world && this.world.settings.DEBUG_DRAW) this.debugDraw();
             }
         });
 
@@ -57,7 +55,7 @@ var Body = Sprite.extend({
             set: function(v){
                 this._height = v;
 
-                if (this._layer && this._layer.settings.DEBUG_DRAW) this.debugDraw();
+                if (this.world && this.world.settings.DEBUG_DRAW) this.debugDraw();
             }
         });
 
@@ -113,29 +111,16 @@ var Body = Sprite.extend({
             }
         });
 
-        Object.defineProperty(this, 'layer', {
-            get: function(){
-                 var p = this, c;
-
-                do {
-                    c = p;
-                    p = c.parent;
-                } while (!(p instanceof Layer));
-
-                return p;
-            }
-        });
-
-        Object.defineProperty(this, 'world', {
-            get: function(){
-                return this.main._world;
-            }
-        });
-
         this.on('added', function () {
             if (this.world.settings.DEBUG_DRAW) {
                 this.debugDraw();
             }
+
+            this.world._bodies.push(this);
+        });
+
+        this.on('removed', function () {
+            this.world._bodies.remove(this);
         });
     },
     setCache: function () {
@@ -147,7 +132,7 @@ var Body = Sprite.extend({
     debugDraw: function () {
         if (!this._debug) {
             this._debug = new createjs.Shape();
-            this.layer.addChild(this._debug);
+            this._container.addChild(this._debug);
         }
 
         this._debug.graphics.c().f('#000000').dr(0, 0, this.width, this.height);
