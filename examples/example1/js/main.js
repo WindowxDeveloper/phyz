@@ -1,5 +1,6 @@
 var preloader = new P.Preloader(),
-    w = new P.World(document.querySelector('canvas'));
+    w = new P.World(document.querySelector('canvas')),
+    c, s, g;
 
 preloader.add('square', 'http://placehold.it/50');
 preloader.add('ground', 'http://placehold.it/480x50');
@@ -14,26 +15,32 @@ preloader.on('complete', function(){
     w.camera.stage.width = 960;
     w.camera.stage.height = 640;
 
-    var s = new P.Sprite('dynamic', false);
+    c = new P.Sprite();
+    c.view = new createjs.Bitmap(preloader.get('square'));
+    c.x = 50;
+
+    s = new P.Body('dynamic', false);
     s.view = new createjs.Bitmap(preloader.get('square'));
     s.width = 50;
     s.height = 50;
     s.x = 150;
     s.y = 0;
 
-    var g = new P.Sprite('static', false);
+    g = new P.Body('static', false);
     g.view = new createjs.Bitmap(preloader.get('ground'));
     g.width = 480;
     g.height = 50;
     g.x = 0;
     g.y = 300;
 
-    w.addChild(s);
-    w.addChild(g);
+    w.camera.stage.layers.default.addChild(c);
+
+    c.addChild(s);
+    c.addChild(g);
 
     var animPlataform = function(){
-        w.tween.to(g, {x: 300}, {time: 1, delay: 2, ease: 'easeOutBounce', oncomplete: function(){
-            w.tween.to(g, {x: 10}, {time: 1, ease: 'easeOutBounce', oncomplete: function(){
+        P.Tween.to(g, {x: 300}, {time: 1, delay: 2, ease: 'easeOutBounce', oncomplete: function(){
+            P.Tween.to(g, {x: 10}, {time: 1, ease: 'easeOutBounce', oncomplete: function(){
                 animPlataform();
             }});
         }});

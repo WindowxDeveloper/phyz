@@ -38,7 +38,7 @@ var Device              = require('./util/Device'),
     World               = require('./World');
 
 var Phyz = {
-    Util: {
+    util: {
         device: Device,
         events: Events
     },

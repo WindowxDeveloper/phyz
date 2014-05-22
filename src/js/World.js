@@ -5,6 +5,7 @@
 var EventHandler        = require('./util/EventHandler'),
     Camera              = require('./display/Camera'),
     Paralax             = require('./display/Paralax'),
+    Body                = require('./display/Body'),
     Tween               = require('./tween/Tween'),
     V2                  = require('./V2');
 
