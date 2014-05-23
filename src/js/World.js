@@ -14,7 +14,7 @@ var timestamp = function () {
 };
 
 function World (el, layers){
-    this._bodies   = [];
+    this._bodies    = [];
     this._tweens    = [];
     this._stage     = null;
     this._paused    = false;
@@ -23,8 +23,17 @@ function World (el, layers){
 
     this.settings   = {
         DEBUG_DRAW: true,
-        FPS_METER: true,
         MAX_DELTA_TIME: 1 / 12, // Minimum of 12 FPS
+        set FPS_METER (v){
+            if (v) {
+                this._fpsmeter = v ? new FPSMeter({decimals: 0, graph: true, theme: 'dark', heat:  true, left: 'auto', top: '5px', right: '5px', bottom: 'auto'}) : null;
+            } else {
+                if (this._fpsmeter) {
+                    this._fpsmeter.destroy();
+                }
+                this._fpsmeter = null;
+            }
+        }
     };
 
     this.physics = {
@@ -51,15 +60,6 @@ function World (el, layers){
         }
     });
 
-    Object.defineProperty(this, 'minFPS', {
-        get: function(){ return this._minFPS; },
-        set: function(v){
-            this._paused = v;
-            this._maxDt = 1 / 12; // minimum of 12 FPS
-        }
-    });
-
-    this._fpsmeter = this.settings.FPS_METER ? new FPSMeter({decimals: 0, graph: true, theme: 'dark', heat:  true, left: 'auto', top: '5px', right: '5px', bottom: 'auto'}) : null;
     this._stage = new createjs.Stage(this.camera.el);
     this._stage.addChild(this.camera.stage._container);
 }
@@ -75,12 +75,12 @@ World.prototype.start = function () {
             _this._update(_this.time.dt);
             _this._render();
             _this.time.last = _this.time.now;
-            if (_this._fpsmeter) _this._fpsmeter.tick();
+            if (_this.settings._fpsmeter) _this.settings._fpsmeter.tick();
         }
         requestAnimationFrame(_frame);
     }
 
-    if (this._fpsmeter) this._fpsmeter.tickStart();
+    if (this.settings._fpsmeter) this.settings._fpsmeter.tickStart();
     requestAnimationFrame(_frame);
 };
 

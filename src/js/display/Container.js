@@ -26,7 +26,7 @@ var Container = Class.extend({
             get: function(){ return this._y; },
             set: function(v){
                 this._y = v;
-                this._container.x = v;
+                this._container.y = v;
             }
         });
     },
