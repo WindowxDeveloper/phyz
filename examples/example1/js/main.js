@@ -1,9 +1,10 @@
 var preloader = new P.Preloader(),
-    w = new P.World(document.querySelector('canvas')),
-    c, s, g;
+    w = new P.World(document.querySelector('canvas'), ['bg', 'bodies']),
+    bg, c, s, g;
 
 preloader.add('square', 'http://placehold.it/50');
 preloader.add('ground', 'http://placehold.it/480x50');
+preloader.add('bg', 'http://wallko.com/wp-content/uploads/2014/03/Dark-Blue-Background-690x431.jpg');
 
 preloader.on('complete', function(){
     console.log('LOAD COMPLETE');
@@ -14,6 +15,10 @@ preloader.on('complete', function(){
     w.camera.height = 640;
     w.camera.stage.width = 960;
     w.camera.stage.height = 640;
+
+    bg = new P.Sprite();
+    bg.view = new createjs.Bitmap(preloader.get('bg'));
+    bg.x = 0;
 
     c = new P.Sprite();
     c.view = new createjs.Bitmap(preloader.get('square'));
@@ -33,7 +38,8 @@ preloader.on('complete', function(){
     g.x = 0;
     g.y = 300;
 
-    w.camera.stage.layers.default.addChild(c);
+    w.camera.stage.layers.bodies.addChild(c);
+    w.camera.stage.layers.bg.addChild(bg);
 
     c.addChild(s);
     c.addChild(g);

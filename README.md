@@ -15,7 +15,6 @@ Phyz is a lightweight, fast and simple game engine for use in desktops and mobil
 - Add TiledIndex (and integrate with automate Stage size changes)
 - Collide adjusts
 - Paralax
-- Extends sprites (entity)
 - Create Drivers for easeljs and pixijs (eg: DisplayObject.prototype.container = new createjs.Container;)
 - Layers display object
     - Defaults

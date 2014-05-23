@@ -23,7 +23,8 @@ function World (el, layers){
 
     this.settings   = {
         DEBUG_DRAW: true,
-        FPS_METER: true
+        FPS_METER: true,
+        MAX_DELTA_TIME: 1 / 12, // Minimum of 12 FPS
     };
 
     this.physics = {
@@ -35,7 +36,8 @@ function World (el, layers){
         now:    0,
         dt:     0,
         time:   0,
-        last:   timestamp()
+        last:   timestamp(),
+        acceleration: 0
     };
 
     Object.defineProperty(this, 'paused', {
@@ -44,8 +46,16 @@ function World (el, layers){
             this._paused = v;
 
             if (!this._paused) {
-                this.time.last = this.time.now;
+                this.time.last = timestamp();
             }
+        }
+    });
+
+    Object.defineProperty(this, 'minFPS', {
+        get: function(){ return this._minFPS; },
+        set: function(v){
+            this._paused = v;
+            this._maxDt = 1 / 12; // minimum of 12 FPS
         }
     });
 
@@ -75,6 +85,9 @@ World.prototype.start = function () {
 };
 
 World.prototype._update = function(dt){
+    dt = dt > this.settings.MAX_DELTA_TIME ? this.settings.MAX_DELTA_TIME : dt;
+    dt = this.time.acceleration === 0 ? dt : (this.time.acceleration > 0 ? dt * (this.time.acceleration + 1) : dt / Math.abs(this.time.acceleration - 1));
+
     Tween.tick(dt, this);
     Body.tick(dt, this);
     Camera.tick(dt, this);

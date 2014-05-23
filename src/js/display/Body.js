@@ -41,6 +41,14 @@ var Body = Sprite.extend({
         // Game loop function
         this.tick           = null;
 
+        this.__set_x = function(v){
+            this._x = v;
+        }
+
+        this.__set_y = function(v){
+            this._y = v;
+        }
+
         Object.defineProperty(this, 'width', {
             get: function(){ return this._width; },
             set: function(v){
@@ -151,7 +159,7 @@ Body.tick = function (dt, world) {
 
         if (s.tick) {
             s.tick(dt);
-        }0
+        }
 
         if (s.type === 'dynamic') {
             acceleration = new V2(

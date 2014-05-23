@@ -10,9 +10,25 @@ var Container = Class.extend({
         this.parent         = null;
         this.childs         = [];
 
+        this._x             = 0;
+        this._y             = 0;
+
         // Position properties
-        this.x              = 0;
-        this.y              = 0;
+        Object.defineProperty(this, 'x', {
+            get: function(){ return this._x; },
+            set: function(v){
+                this._x = v;
+                this._container.x = v;
+            }
+        });
+
+        Object.defineProperty(this, 'y', {
+            get: function(){ return this._y; },
+            set: function(v){
+                this._y = v;
+                this._container.x = v;
+            }
+        });
     },
     addChild: function (child) {
         child.parent = this;
