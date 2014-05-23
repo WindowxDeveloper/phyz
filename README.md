@@ -24,6 +24,17 @@ Phyz is a lightweight, fast and simple game engine for use in desktops and mobil
         - debug
 - Add plataform type param (top, right, bottom or left)
 - Tiled map editor
+- HTML Debug and Initialization
+
+<world>
+    <camera>
+        <stage>
+            <player></player>
+            <body></body>
+            <sprite></sprite>
+        </stage>
+    </camera>
+</world>
 
 
 Phyz
