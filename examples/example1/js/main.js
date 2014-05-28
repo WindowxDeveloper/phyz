@@ -63,7 +63,7 @@ preloader.on('complete', function(){
         e.preventDefault();
     });
 
-    w.camera.following = s;
+    w.camera.target = s;
     w.start();
 
 });

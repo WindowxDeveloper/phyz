@@ -1,13 +1,13 @@
 var V2 = require('../V2');
 
-function CollisionData (s, o){
+function CollisionData (b, o){
     this.self = {
-        sprite: s,
-        point: new V2(s.x, s.y)
+        body: b,
+        point: new V2(b.x, b.y)
     };
 
     this.other = {
-        sprite: o,
+        body: o,
         point: new V2(o.x, o.y)
     };
 }

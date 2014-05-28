@@ -1,5 +1,6 @@
 var Container   = require('./Container'),
-    Layer       = require('./Layer');
+    Layer       = require('./Layer'),
+    V2          = require('../V2');
 
 var Sprite = Container.extend({
     init: function () {
@@ -54,6 +55,25 @@ var Sprite = Container.extend({
                 }
 
                 return world;
+            }
+        });
+
+        Object.defineProperty(this, 'global', {
+            get: function(){
+                var pos = new V2(this.x, this.y),
+                    p   = this.parent,
+                    c;
+
+                do {
+                    c = p;
+
+                    pos.x += c.x;
+                    pos.y += c.y;
+
+                    p = c.parent;
+                } while (!(p instanceof Layer));
+
+                return pos;
             }
         });
     }

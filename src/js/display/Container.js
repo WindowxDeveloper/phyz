@@ -1,5 +1,5 @@
-var EventHandler = require('../util/EventHandler');
-var Class = require('../util/Class');
+var EventHandler    = require('../util/EventHandler'),
+    Class           = require('../util/Class');
 
 var Container = Class.extend({
     init: function () {

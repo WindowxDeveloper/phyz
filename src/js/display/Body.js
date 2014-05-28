@@ -1,5 +1,4 @@
 var Sprite      = require('./Sprite'),
-    Layer       = require('./Layer'),
     Collisions  = require('../collision/Collisions'),
     Collide     = require('../collision/Collide'),
     V2          = require('../V2');
@@ -64,25 +63,6 @@ var Body = Sprite.extend({
                 this._height = v;
 
                 if (this.world && this.world.settings.DEBUG_DRAW) this.debugDraw();
-            }
-        });
-
-        Object.defineProperty(this, 'global', {
-            get: function(){
-                var pos = new V2(0, 0),
-                    p   = this.parent,
-                    c;
-
-                do {
-                    c = p;
-
-                    pos.x += c.x;
-                    pos.y += c.y;
-
-                    p = c.parent;
-                } while (!(p instanceof Layer));
-
-                return pos;
             }
         });
 

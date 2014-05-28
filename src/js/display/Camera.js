@@ -49,8 +49,8 @@ Camera.tick = function (dt, world) {
 
     if (c.target) {
         limit = new V2(c.stage.width - c.width, c.stage.height - c.height);
-        c.x = c.target.x + (c.target.width/2) - (c.width/2);
-        c.y = c.target.y + (c.target.height/2) - (c.height/2);
+        c.x = c.target.global.x + (c.target.width/2) - (c.width/2);
+        c.y = c.target.global.y + (c.target.height/2) - (c.height/2);
 
         if (c.x < 0) {
             c.x = 0;
