@@ -23,7 +23,7 @@ Collide.prototype.check = function(s, o){
         c = new CollisionData(s, o);
 
         if(!s.sensor && !o.sensor){
-            if(!o.config.plataform || (o.config.plataform && s.cache.y < s.cache.y)) {
+            if(!o.config.plataform || (o.config.plataform && (s.cache.y + s.height <= o.y))) {
                 collideY = overlap.x < overlap.y;
                 if (collideY) {
                     s.y += overlap.y;
@@ -57,8 +57,8 @@ Collide.prototype.check = function(s, o){
 };
 
 Collide.prototype.normal = function(collision){
-    var s = collision.self.sprite,
-        o = collision.other.sprite;
+    var s = collision.self.body,
+        o = collision.other.body;
 
     o.velocity.x = o.x - o.cache.x;
     o.velocity.y = o.y - o.cache.y;
@@ -68,8 +68,8 @@ Collide.prototype.normal = function(collision){
 };
 
 Collide.prototype.elastic = function (collision) {
-    var s = collision.self.sprite,
-    o = collision.other.sprite;
+    var s = collision.self.body,
+    o = collision.other.body;
 
     s.velocity = new V2(
         ((s.velocity.x * (s.mass - o.mass)) + (2 * o.mass * o.velocity.x)) / (s.mass + o.mass),

@@ -16,6 +16,7 @@ var Body = Sprite.extend({
 
         // Position and size (and cache) properties
         this.cache          = {};
+        this.cache.rotation = this.rotation;
         this.cache.x        = this.x;
         this.cache.y        = this.y;
         this.cache.width    = this._width = 0;
@@ -40,6 +41,8 @@ var Body = Sprite.extend({
         // Game loop function
         this.tick           = null;
 
+        /*
+        This code remove "this._container.x = v;" from de setter for bodies
         this.__set_x = function(v){
             this._x = v;
         }
@@ -47,6 +50,7 @@ var Body = Sprite.extend({
         this.__set_y = function(v){
             this._y = v;
         }
+        */
 
         Object.defineProperty(this, 'width', {
             get: function(){ return this._width; },
@@ -112,6 +116,7 @@ var Body = Sprite.extend({
         });
     },
     setCache: function () {
+        this.cache.rotation = this.rotation;
         this.cache.x        = this.x;
         this.cache.y        = this.y;
         this.cache.width    = this.width;
@@ -130,18 +135,16 @@ var Body = Sprite.extend({
 });
 
 Body.tick = function (dt, world) {
-    var s, acceleration, resistance, others, o, i, j, bodies = world._bodies;
+    var s, acceleration, resistance, others, o, i, j, bodies = world._bodies, dynamics = [];
 
     for (i = 0; i < bodies.length; i++) {
         s = bodies[i];
 
         s.setCache();
 
-        if (s.tick) {
-            s.tick(dt);
-        }
-
         if (s.type === 'dynamic') {
+            dynamics.push(s);
+
             acceleration = new V2(
                 (s.world.physics.acceleration.x + s.acceleration.x) * dt,
                 (s.world.physics.acceleration.y + s.acceleration.y) * dt
@@ -176,6 +179,23 @@ Body.tick = function (dt, world) {
 
             // others = s.world.camera.stage.tiles.getOthers(s);
 
+            for (j = 0; j < bodies.length; j++) {
+                o = bodies[j];
+                if (s !== o) {
+                    Collide.check(s, o);
+                }
+            }
+        }
+
+        if (s.tick) {
+            s.tick(dt);
+        }
+    }
+
+    for (i = 0; i < dynamics.length; i++) {
+        s = dynamics[i];
+
+        if (s.type === 'dynamic') {
             for (j = 0; j < bodies.length; j++) {
                 o = bodies[j];
                 if (s !== o) {

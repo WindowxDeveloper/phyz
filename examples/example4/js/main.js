@@ -1,7 +1,7 @@
 var preloader, w, c, arrow, ground;
 
 preloader = new P.Preloader();
-preloader.add('arrow', 'img/arrow.png');
+preloader.add('arrow', 'img/arrow.png?1');
 
 preloader.on('complete', function(){
     w = new P.World(document.querySelector('canvas'), ['bg', 'bodies']);

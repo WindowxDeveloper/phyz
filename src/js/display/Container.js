@@ -10,6 +10,7 @@ var Container = Class.extend({
         this.parent         = null;
         this.childs         = [];
 
+        this._rotation      = 0;
         this._x             = 0;
         this._y             = 0;
 
@@ -27,6 +28,14 @@ var Container = Class.extend({
             set: function(v){
                 this._y = v;
                 this._container.y = v;
+            }
+        });
+
+        Object.defineProperty(this, 'rotation', {
+            get: function(){ return this._rotation; },
+            set: function(v){
+                this._rotation = v;
+                this._container.rotation = v;
             }
         });
     },

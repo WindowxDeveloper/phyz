@@ -2,7 +2,6 @@ var Container   = require('./Container'),
     Layer       = require('./Layer');
     // TiledIndex  = require('../TiledIndex');
 
-
 var Stage = Container.extend({
     init: function(world, layers){
         var i, l;
