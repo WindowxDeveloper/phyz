@@ -4,7 +4,7 @@ var CollisionData   = require('./CollisionData'),
 
 function Collide () {}
 
-Collide.prototype.check = function(s, o){
+Collide.prototype.check = function(s, o, dt){
     var collided = false, overlap = new V2(0, 0), a, b, x, y, c, collideY;
 
     if (s.x <= o.x) { a = s; b = o; } else { a = o; b = s; }
@@ -32,9 +32,9 @@ Collide.prototype.check = function(s, o){
                 }
 
                 if(s.type === 'dynamic' && o.type === 'dynamic'){
-                    this.elastic(c);
+                    this.elastic(c, dt);
                 }else{
-                    this.normal(c);
+                    this.normal(c, dt);
 
                     if (collideY) {
                         s.velocity.y = 0;
@@ -56,18 +56,15 @@ Collide.prototype.check = function(s, o){
     }
 };
 
-Collide.prototype.normal = function(collision){
+Collide.prototype.normal = function(collision, dt){
     var s = collision.self.body,
         o = collision.other.body;
 
-    o.velocity.x = o.x - o.cache.x;
-    o.velocity.y = o.y - o.cache.y;
-
-    s.x += o.velocity.x;
-    s.y += o.velocity.y;
+    s.x += (o.velocity.x) * dt;
+    s.y += (o.velocity.y) * dt;
 };
 
-Collide.prototype.elastic = function (collision) {
+Collide.prototype.elastic = function (collision, dt) {
     var s = collision.self.body,
     o = collision.other.body;
 

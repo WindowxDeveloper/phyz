@@ -14,14 +14,6 @@ var Body = Sprite.extend({
         this.type           = type || 'static'; // Values: dynamic or static
         this.sensor         = sensor || false;
 
-        // Position and size (and cache) properties
-        this.cache          = {};
-        this.cache.rotation = this.rotation;
-        this.cache.x        = this.x;
-        this.cache.y        = this.y;
-        this.cache.width    = this._width = 0;
-        this.cache.height   = this._height = 0;
-
         // Physics properties
         this.mass           = 0;
         this.bounce         = 0; // Percent value: 0 to 1
@@ -55,6 +47,7 @@ var Body = Sprite.extend({
         Object.defineProperty(this, 'width', {
             get: function(){ return this._width; },
             set: function(v){
+                this.cache.width = this._width;
                 this._width = v;
 
                 if (this.world && this.world.settings.DEBUG_DRAW) this.debugDraw();
@@ -64,6 +57,7 @@ var Body = Sprite.extend({
         Object.defineProperty(this, 'height', {
             get: function(){ return this._height; },
             set: function(v){
+                this.cache.height = this._height;
                 this._height = v;
 
                 if (this.world && this.world.settings.DEBUG_DRAW) this.debugDraw();
@@ -114,13 +108,10 @@ var Body = Sprite.extend({
         this.on('removed', function () {
             this.world._bodies.remove(this);
         });
-    },
-    setCache: function () {
-        this.cache.rotation = this.rotation;
-        this.cache.x        = this.x;
-        this.cache.y        = this.y;
-        this.cache.width    = this.width;
-        this.cache.height   = this.height;
+
+        // Set default values and cache
+        this.width  = this._width;
+        this.height = this._height;
     },
     debugDraw: function () {
         if (!this._debug) {
@@ -139,8 +130,6 @@ Body.tick = function (dt, world) {
 
     for (i = 0; i < bodies.length; i++) {
         s = bodies[i];
-
-        s.setCache();
 
         if (s.type === 'dynamic') {
             dynamics.push(s);
@@ -176,21 +165,14 @@ Body.tick = function (dt, world) {
 
             s.y += s.velocity.y * dt;
             s.x += s.velocity.x * dt;
-
-            // others = s.world.camera.stage.tiles.getOthers(s);
-
-            for (j = 0; j < bodies.length; j++) {
-                o = bodies[j];
-                if (s !== o) {
-                    Collide.check(s, o);
-                }
-            }
         }
 
         if (s.tick) {
             s.tick(dt);
         }
     }
+
+    //others = s.world.camera.stage.tiles.getOthers(s);
 
     for (i = 0; i < dynamics.length; i++) {
         s = dynamics[i];
@@ -199,7 +181,7 @@ Body.tick = function (dt, world) {
             for (j = 0; j < bodies.length; j++) {
                 o = bodies[j];
                 if (s !== o) {
-                    Collide.check(s, o);
+                    Collide.check(s, o, dt);
                 }
             }
         }

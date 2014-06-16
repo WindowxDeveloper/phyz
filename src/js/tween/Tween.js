@@ -73,26 +73,37 @@ Tween.prototype.create = function (o, props, params, isFrom) {
 };
 
 var t = new Tween();
+
 t.tick = function (dt, world) {
     var i, j, t, tweens = world._tweens, len = tweens.length;
 
     for (i = 0; i < len; i++) {
         t = tweens[i];
 
-        t.dt += dt;
-        t.dt = (t.dt > t.p.time ? t.p.time : t.dt);
-
-        if (t.dt > 0) {
-            for (j in t.from) {
-                t.o[j] = Easings[t.p.ease](t.dt, t.from[j], t.to[j] - t.from[j], t.p.time);
-            }
-        }
-
         if (t.dt === t.p.time) {
+            if (t.from.x !== undefined) { t.o.velocity.x = 0; }
+            if (t.from.y !== undefined) { t.o.velocity.y = 0; }
+
             if (t.p.oncomplete) {
                 t.p.oncomplete.apply(t.o);
             }
+
             world._tweens.remove(t);
+        } else {
+            t.dt += dt;
+            t.dt = (t.dt > t.p.time ? t.p.time : t.dt);
+
+            if (t.dt > 0) {
+                if (t.from.x !== undefined) { t.o.velocity.x = t.o.x; }
+                if (t.from.y !== undefined) { t.o.velocity.y = t.o.y; }
+
+                for (j in t.from) {
+                    t.o[j] = Easings[t.p.ease](t.dt, t.from[j], t.to[j] - t.from[j], t.p.time);
+                }
+
+                if (t.from.x !== undefined) { t.o.velocity.x = (t.o.x - t.o.velocity.x) / dt; }
+                if (t.from.y !== undefined) { t.o.velocity.y = (t.o.y - t.o.velocity.y) / dt; }
+            }
         }
     }
 }
