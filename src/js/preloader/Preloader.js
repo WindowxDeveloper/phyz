@@ -1,3 +1,4 @@
+var EventHandler = require('../util/EventHandler');
 
 function Preloader(){
     this.order = [];
@@ -27,7 +28,7 @@ Preloader.prototype.get = function(name){
 Preloader.prototype.add = function(name, filename){
     if (typeof this.queue[name] === 'undefined' && typeof this.loaded[name] === 'undefined') {
         this.order.push(name);
-        this.queue[name] = filename;
+        this.queue[name] = filename + '?' + (new Date).getTime();
         this.trigger('add');
     }
 };
@@ -57,7 +58,7 @@ Preloader.prototype.next = function(){
         img.onload = function(){
             self.loaded[self.order[i]] = this;
 
-            self.trigger('itemComplete', {order: i, filename: filename, progress: i/self.order.length});
+            self.trigger('itemComplete', {id: self.order[i], order: i, filename: filename, progress: i/self.order.length});
             self.next();
         };
 
