@@ -1,4 +1,3 @@
-var EventHandler = require('../util/EventHandler');
 
 function Preloader(){
     this.order = [];
@@ -26,7 +25,7 @@ Preloader.prototype.get = function(name){
 * @param filename
 */
 Preloader.prototype.add = function(name, filename){
-    if(typeof this.queue[name] === 'undefined' && typeof this.loaded[name] === 'undefined'){
+    if (typeof this.queue[name] === 'undefined' && typeof this.loaded[name] === 'undefined') {
         this.order.push(name);
         this.queue[name] = filename;
         this.trigger('add');
@@ -49,7 +48,7 @@ Preloader.prototype.clear = function(){
 * @param
 */
 Preloader.prototype.next = function(){
-    if(this.order.length > this.index){
+    if (this.order.length > this.index) {
         var self        = this,
             img         = new Image(),
             i           = this.index++,
@@ -63,7 +62,7 @@ Preloader.prototype.next = function(){
         };
 
         img.src = filename;
-    }else{
+    } else {
         this.trigger('complete');
     }
 };
